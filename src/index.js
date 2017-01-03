@@ -1,9 +1,10 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import {Router, Route, IndexRoute, browserHistory} from "react-router";
-import Layout from "./Pages/Layout";
-import MainPage from "./Pages/Main";
-import AboutPage from "./Pages/About";
+import React from "react"
+import ReactDOM from "react-dom"
+import {Router, Route, IndexRoute, browserHistory} from "react-router"
+import Layout from "./Pages/Layout"
+import MainPage from "./Pages/Main"
+import AboutPage from "./Pages/About"
+import NotFoundPage from './Pages/404'
 
 // need for material-ui
 import injectTapEventPlugin from "react-tap-event-plugin";
@@ -19,6 +20,7 @@ ReactDOM.render(
             <Route path="/" component={Layout}>
                 <IndexRoute component={MainPage}/>
                 <Route path="/about" component={AboutPage}/>
+                <Route path="*" component={NotFoundPage}/>
             </Route>
         </Router>
     </MuiThemeProvider>,
