@@ -7,13 +7,13 @@ const aboutStyles = StyleSheet.create({
     }
 })
 
-
 export default class MainPage extends Component {
+
     render() {
         return (
             <div className={css(aboutStyles.layout)}>
                 <br/><br/>
-                MainPage
+                Main Page
             </div>
         );
     }
