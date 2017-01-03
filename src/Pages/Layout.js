@@ -2,15 +2,25 @@ import React, {Component} from "react";
 import {Link} from "react-router"
 import FlatButton from 'material-ui/FlatButton';
 
+import {StyleSheet, css} from 'aphrodite';
+
+
+const headerStyles = StyleSheet.create({
+    testMarginRight: {
+        marginRight: '0px'
+    }
+});
+
+
 export default class MainPage extends Component {
     render() {
         return (
             <main>
                 <header>
                     <Link to="/">
-                        <FlatButton label="MainPage"/>
+                        <FlatButton className={css(headerStyles.testMarginRight)} label="MainPage"/>
                     </Link>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
+
                     <Link to="/about">
                         <FlatButton label="AboutPage"/>
                     </Link>
