@@ -15,16 +15,12 @@ injectTapEventPlugin();
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
 import authHighOrderComponent from './Components/authHoc'
+import {signOutApi} from './Utils/fetchApi'
+
 
 const signOut = () => {
     localStorage.removeItem('auth');
-    fetch('https://admin7.azurewebsites.net/logout', {
-        method: 'POST',
-        mode: 'cors',
-        credentials: 'include',
-        headers: {'Content-Type': 'application/json'}
-    })
-        .then(() => browserHistory['replace']('/login'))
+    signOutApi().then(() => browserHistory['replace']('/login'))
 }
 
 ReactDOM.render(
@@ -32,7 +28,7 @@ ReactDOM.render(
         <Router history={browserHistory}>
             <Route path="/" component={Layout}>
                 <IndexRoute component={authHighOrderComponent(MainPage)}/>
-                <Route path="/about" component={authHighOrderComponent(AboutPage)}/>
+                <Route path="/about" component={AboutPage}/>
                 <Route path="/login" component={LoginPage}/>
                 <Route path="/signout" onEnter={signOut}/>
                 <Route path="*" component={NotFoundPage}/>

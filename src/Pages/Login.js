@@ -1,6 +1,8 @@
 import React, {Component} from "react"
 import validator from 'validator'
 import {browserHistory} from 'react-router'
+import {loginApi} from '../Utils/fetchApi'
+
 
 
 export default class LoginPage extends Component {
@@ -44,11 +46,7 @@ export default class LoginPage extends Component {
             remember: rememberMe.checked
         })
 
-        fetch('https://admin7.azurewebsites.net/login', {
-            method: 'post',
-            headers: {'Content-Type': 'application/json'},
-            body: fetchBody
-        })
+        loginApi(fetchBody)
             .then(res => {
                 if (res.status === 200) {
                     localStorage.setItem('auth', true)
@@ -58,18 +56,17 @@ export default class LoginPage extends Component {
                     this.setState({validateError: 'Not valid login or password!'})
                 }
             })
-
     }
 
     render() {
         return (
-            <form style={{margin: '100px 530px'}}>
+            <form action="#" style={{margin: '100px 530px'}}>
                 <p>Login</p>
-                <input type="email" ref="username"/>
+                <input type="email" name="email" ref="username"/>
                 <p>Password</p>
-                <input type="password" ref="password"/>
+                <input type="password" name="password" ref="password"/>
                 <p>Remember me</p>
-                <input type="checkbox" ref="rememberMe"/>
+                <input type="checkbox" name="rememberMe" ref="rememberMe"/>
                 <br/><br/>
                 <button onClick={this.login.bind(this)} type="submit">Send</button>
 

@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import CircularProgress from 'material-ui/CircularProgress'
 import {browserHistory} from 'react-router'
+import {checkAuthApi} from '../Utils/fetchApi'
 
 
 export default function authHighOrderComponent(WrappedComp) {
@@ -16,8 +17,7 @@ export default function authHighOrderComponent(WrappedComp) {
 
         componentWillMount() {
             if (localStorage.getItem('auth')) {
-                fetch(`http://admin7.azurewebsites.net/username`, {mode: 'cors', credentials: 'include'})
-                    .then(res => res.json())
+                checkAuthApi().then(res => res.json())
                     .then(data => {
                         if (data.length > 0) {
                             this.setState({auth: true})
