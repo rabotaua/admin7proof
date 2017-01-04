@@ -1,5 +1,5 @@
 import React, {Component} from "react"
-import Sidebar from './Sidebar'
+import Sidebar from '../Components/Sidebar'
 
 export default class MainPage extends Component {
     render() {

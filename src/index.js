@@ -6,6 +6,7 @@ import MainPage from "./Pages/Main"
 import AboutPage from "./Pages/About"
 import LoginPage from "./Pages/Login"
 import NotFoundPage from './Pages/404'
+import OpenRequestsPage from './Pages/OpenRequests'
 
 // need for material-ui
 import injectTapEventPlugin from "react-tap-event-plugin";
@@ -30,6 +31,7 @@ ReactDOM.render(
                 <IndexRoute component={authHighOrderComponent(MainPage)}/>
                 <Route path="/about" component={AboutPage}/>
                 <Route path="/login" component={LoginPage}/>
+                <Route path="/open" component={authHighOrderComponent(OpenRequestsPage)}/>
                 <Route path="/signout" onEnter={signOut}/>
                 <Route path="*" component={NotFoundPage}/>
             </Route>
