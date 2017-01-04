@@ -20,3 +20,9 @@ export const getListApi = (type = '', stateIds = '') => {
         method: 'get'
     })
 }
+
+export const getRequestDataApi = (requestId) => {
+    return fetch(`${apiUrl}/exec/spAdmin7_Request_GetInfo`, {
+        ...requestOptions, body: `[{ key: "RequestID", value: ${requestId} }]`
+    })
+}

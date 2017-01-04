@@ -1,6 +1,7 @@
 import React, {Component} from "react"
 import {getListApi} from '../Utils/fetchApi'
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
+import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
+import {Link} from 'react-router'
 
 
 export default class OpenRequests extends Component {
@@ -10,7 +11,7 @@ export default class OpenRequests extends Component {
 
         this.state = {
             filter: 1,
-            stateIds: '0,1,2,3',
+            stateIds: '0,1,2,3', //all open request
             list: null
         }
     }
@@ -28,6 +29,11 @@ export default class OpenRequests extends Component {
         this.getListRequest(1, this.state.stateIds)
     }
 
+    statusWord(id) {
+        id = parseInt(id, 10); // eslint swears on the second argument :C   It's a radix argument O_O
+        return id === 1 ? 'открыта' : id === 2 ? 'в работе' : id === 3 ? 'открыта повторно' : id === 4 ? 'закрыта' : ''
+    }
+
     render() {
 
         const {list, filter} = this.state
@@ -41,11 +47,11 @@ export default class OpenRequests extends Component {
                 <br/><br/><br/>
 
                 <a href="#employers" onClick={() => this.changeType(1)}
-                   style={Object.assign({}, linkStyle, filter == 1 ? {color: 'red'} : '')}>Работодатели
+                   style={Object.assign({}, linkStyle, filter === 1 ? {color: 'red'} : '')}>Работодатели
                 </a>
 
                 <a href="#jobsearchers" onClick={() => this.changeType(2)}
-                   style={Object.assign({}, linkStyle, filter == 2 ? {color: 'red'} : '')}>Соискатели
+                   style={Object.assign({}, linkStyle, filter === 2 ? {color: 'red'} : '')}>Соискатели
                 </a>
 
                 <br/>
@@ -67,16 +73,19 @@ export default class OpenRequests extends Component {
                         ? list[0].map(request => {
                             return (
                                 <TableRow key={request.requestID}>
-                                    <TableRowColumn>{request.requestID}</TableRowColumn>
+                                    <TableRowColumn><Link
+                                        to={`/request/${request.requestID}`}>{request.requestID}</Link></TableRowColumn>
                                     <TableRowColumn>{request.notebookID}</TableRowColumn>
                                     <TableRowColumn>{request.eMail}</TableRowColumn>
                                     <TableRowColumn>{request.subjectName}</TableRowColumn>
                                     <TableRowColumn>{request.subSubjectName}</TableRowColumn>
-                                    <TableRowColumn>{request.state}</TableRowColumn>
+                                    <TableRowColumn>{ this.statusWord(request.state) }</TableRowColumn>
                                 </TableRow>
                             )
                         })
-                        : <p><br/>LOADING...</p> }
+                        : <tr>
+                            <td>LOADING...</td>
+                        </tr> }
                     </TableBody>
                 </Table>
 

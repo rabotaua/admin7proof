@@ -32,7 +32,7 @@ export default class Sidebar extends Component {
                         primaryText="No page"/>
 
                     { localStorage.getItem('auth') ?
-                        <MenuItem containerElement={<Link to="/open"/>} primaryText="Open requests"/> : "" }
+                        <MenuItem containerElement={<Link to="/requests/open"/>} primaryText="Open requests"/> : "" }
 
                     { localStorage.getItem('auth') ?
                         <MenuItem containerElement={<Link to="/signout"/>} primaryText="Sign out"/> : "" }
