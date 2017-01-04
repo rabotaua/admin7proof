@@ -18,7 +18,12 @@ import authHighOrderComponent from './Components/authHoc'
 
 const signOut = () => {
     localStorage.removeItem('auth');
-    fetch('https://admin7.azurewebsites.net/logout', {method: 'POST', headers: {'Content-Type': 'application/json'}})
+    fetch('https://admin7.azurewebsites.net/logout', {
+        method: 'POST',
+        mode: 'cors',
+        credentials: 'include',
+        headers: {'Content-Type': 'application/json'}
+    })
         .then(() => browserHistory['replace']('/login'))
 }
 

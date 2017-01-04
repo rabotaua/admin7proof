@@ -19,7 +19,6 @@ export default function authHighOrderComponent(WrappedComp) {
                 fetch(`http://admin7.azurewebsites.net/username`, {mode: 'cors', credentials: 'include'})
                     .then(res => res.json())
                     .then(data => {
-                        console.log(data);
                         if (data.length > 0) {
                             this.setState({auth: true})
                         }
