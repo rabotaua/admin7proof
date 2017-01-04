@@ -35,6 +35,7 @@ export default class MainPage extends Component {
                                 <HeaderNavBtn name="Main page" link="/"/>
                                 <HeaderNavBtn name="About page" link="/about"/>
                                 <HeaderNavBtn name="Another page" link="/404"/>
+                                { localStorage.getItem('auth') ? <HeaderNavBtn name="Sign out" link="/signout"/> : '' }
                             </div>
                         }
                     />
