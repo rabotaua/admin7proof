@@ -1,5 +1,6 @@
 import React, {Component} from "react"
 import {getListApi} from '../Utils/fetchApi'
+import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 
 
 export default class OpenRequests extends Component {
@@ -8,8 +9,9 @@ export default class OpenRequests extends Component {
         super();
 
         this.state = {
-            list: null,
-            stateIds: 1
+            filter: 1,
+            stateIds: '0,1,2,3',
+            list: null
         }
     }
 
@@ -28,7 +30,9 @@ export default class OpenRequests extends Component {
 
     render() {
 
-        const {list} = this.state
+        const {list, filter} = this.state
+
+        const linkStyle = {color: 'blue', marginTop: 50, marginLeft: 20}
 
         return (
             <div style={{marginLeft: 300}}>
@@ -36,24 +40,45 @@ export default class OpenRequests extends Component {
                 <div>Открытые заявки</div>
                 <br/><br/><br/>
 
-
                 <a href="#employers" onClick={() => this.changeType(1)}
-                   style={{color: 'blue', marginTop: 50, marginLeft: 20}}>Работодатели</a>
-                <a href="#jobsearchers" onClick={() => this.changeType(2)}
-                   style={{color: 'blue', marginTop: 50, marginLeft: 20}}>Соискатели</a>
+                   style={Object.assign({}, linkStyle, filter == 1 ? {color: 'red'} : '')}>Работодатели
+                </a>
 
-                <div>
+                <a href="#jobsearchers" onClick={() => this.changeType(2)}
+                   style={Object.assign({}, linkStyle, filter == 2 ? {color: 'red'} : '')}>Соискатели
+                </a>
+
+                <br/>
+                <br/>
+
+                <Table>
+                    <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+                        <TableRow>
+                            <TableHeaderColumn>ID заявки</TableHeaderColumn>
+                            <TableHeaderColumn>ID блокнота</TableHeaderColumn>
+                            <TableHeaderColumn>Email</TableHeaderColumn>
+                            <TableHeaderColumn>Тема</TableHeaderColumn>
+                            <TableHeaderColumn>Подтема</TableHeaderColumn>
+                            <TableHeaderColumn>Состояние</TableHeaderColumn>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody displayRowCheckbox={false}>
                     { list
                         ? list[0].map(request => {
-                            return <p key={request.requestID}>
-                                <small><a href="#">{request.requestID}</a></small>
-                                &nbsp;&nbsp;
-                                {request.userName}
-                                <small>({request.eMail})</small>
-                            </p>
+                            return (
+                                <TableRow key={request.requestID}>
+                                    <TableRowColumn>{request.requestID}</TableRowColumn>
+                                    <TableRowColumn>{request.notebookID}</TableRowColumn>
+                                    <TableRowColumn>{request.eMail}</TableRowColumn>
+                                    <TableRowColumn>{request.subjectName}</TableRowColumn>
+                                    <TableRowColumn>{request.subSubjectName}</TableRowColumn>
+                                    <TableRowColumn>{request.state}</TableRowColumn>
+                                </TableRow>
+                            )
                         })
                         : <p><br/>LOADING...</p> }
-                </div>
+                    </TableBody>
+                </Table>
 
             </div>
         );
