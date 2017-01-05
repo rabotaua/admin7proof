@@ -29,9 +29,10 @@ export const getListApi = (paramsObj, paramsString = '' /* second arg is optiona
      */
 
     if (!paramsString) {
+        // eslint-disable-next-line
         Object.keys(paramsObj).map(param => {
             if (paramsObj[param].length !== '') {
-                return paramsString += `${param}=${paramsObj[param]}&`
+                paramsString += `${param}=${paramsObj[param]}&`
             }
         })
     }
