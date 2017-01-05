@@ -11,25 +11,32 @@ export const loginApi = (body) => fetch(`${apiUrl}/login`, {...requestOptions, b
 export const checkAuthApi = () => fetch(`${apiUrl}/username`, {...requestOptions, method: 'get'})
 export const signOutApi = () => fetch(`${apiUrl}/logout`, requestOptions)
 
-export const getListApi = (paramsObj) => {
+export const getListApi = (paramsObj, paramsString = '' /* second arg is optional */) => {
 
-    const queryParams = {
-        type: paramsObj.type || '',
-        requestId: paramsObj.requestId || '',
-        stateIds: paramsObj.stateIds || '',
-        notebookId: paramsObj.notebookId || '',
-        eMail: paramsObj.eMail || '',
-        responsibleLogin: paramsObj.responsibleLogin || '',
-        dateFrom: paramsObj.dateFrom || '',
-        isOnlyCount: paramsObj.isOnlyCount || '',
-        startRowIndex: paramsObj.startRowIndex || '',
-        maximumRows: paramsObj.maximumRows || '',
-        sortField: paramsObj.sortField || '',
-        sortDirection: paramsObj.sortDirection || ''
+    /* ==== AVAILABLE PARAMS: ====
+     type,
+     requestId,
+     notebookId,
+     eMail,
+     stateIds,
+     responsibleLogin,
+     dateFrom,
+     isOnlyCount,
+     startRowIndex,
+     maximumRows,
+     sortField,
+     sortDirection
+     */
+
+    if (!paramsString) {
+        Object.keys(paramsObj).map(param => {
+            if (paramsObj[param].length !== '') {
+                return paramsString += `${param}=${paramsObj[param]}&`
+            }
+        })
     }
 
-    return fetch(`${apiUrl}/exec/spAdmin7_Request_GetList?type=${queryParams.type}&stateIDs=${queryParams.stateIds}&notebookId=${queryParams.notebookId}&requestId=${queryParams.requestId}&eMail=${queryParams.eMail}&responsibleLogin=${queryParams.responsibleLogin}&dateFrom=${queryParams.dateFrom}&isOnlyCount=${queryParams.isOnlyCount}&startRowIndex=${queryParams.startRowIndex}&maximumRows=${queryParams.maximumRows}&sortField=${queryParams.sortField}&sortDirection=${queryParams.sortDirection}`,
-        {...requestOptions, method: 'get'})
+    return fetch(`${apiUrl}/exec/spAdmin7_Request_GetList?${paramsString}`, {...requestOptions, method: 'get'})
 }
 
 export const getRequestDataApi = (requestId) => {

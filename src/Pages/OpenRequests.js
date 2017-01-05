@@ -28,7 +28,6 @@ export default class OpenRequests extends Component {
     }
 
     searchItems(params) {
-        const {requestId, notebookId, eMail} = params;
         this.getListRequest(params);
     }
 
