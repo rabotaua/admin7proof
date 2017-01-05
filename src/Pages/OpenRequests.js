@@ -65,15 +65,15 @@ export default class OpenRequests extends Component {
 
         const {list, type} = this.state
 
-        const linkStyle = {color: 'rgba(116, 108, 148, 0.65)', marginTop: 50, marginRight: 20, 'text-decoration': 'none'}
+        const linkStyle = {color: 'rgba(116, 108, 148, 0.65)', marginTop: 50, marginRight: 20, textDecoration: 'none'}
 
         return (
 
             <div>
                 
-                <h1 style={{color: 'rgb(124, 127, 148)', padding: '0 0 0 20px', 'text-transform' : 'uppercase'}}>Открытые заявки</h1>
+                <h1 style={{color: 'rgb(124, 127, 148)', padding: '0 0 0 20px', textTransform : 'uppercase'}}>Открытые заявки</h1>
 
-                <div style={{'background-color' : 'rgba(219, 201, 243, 0.35)', padding: '20px'}}>
+                <div style={{backgroundColor : 'rgba(219, 201, 243, 0.35)', padding: '20px', overflow: 'hidden'}}>
 
                     <a href="#employers" onClick={() => this.changeType(2)}
                        style={Object.assign({}, linkStyle, type === 2 ? {color: '#3D5AFE'} : '')}>Работодатели
@@ -82,14 +82,11 @@ export default class OpenRequests extends Component {
                     <a href="#jobsearchers" onClick={() => this.changeType(1)}
                        style={Object.assign({}, linkStyle, type === 1 ? {color: '#3D5AFE'} : '')}>Соискатели
                     </a>
-                </div>
-                <br/>
-                <br/>
-                <SearchComponent searchCallback={this.searchItems.bind(this)}
+                    
+                    <SearchComponent searchCallback={this.searchItems.bind(this)}
                                  resetCallback={this.searchReset.bind(this)}/>
 
-                <br/>
-                <br/>
+                </div>
 
 
                 <Table>
@@ -107,7 +104,7 @@ export default class OpenRequests extends Component {
                     { list
                         ? list[0].map(request => {
                             return (
-                                <TableRow key={request.requestID}>
+                                <TableRow key={request.requestID} selectable={false}>
                                     <TableRowColumn><Link className={css(tableStyles.link)}
                                         to={`/request/${request.requestID}`}>{request.requestID}</Link></TableRowColumn>
                                     <TableRowColumn>{request.notebookID}</TableRowColumn>

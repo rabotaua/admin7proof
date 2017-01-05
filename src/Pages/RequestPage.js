@@ -17,7 +17,6 @@ const Styles = StyleSheet.create({
     paper: {
         width: '50%',
         'margin-top' : '20px',
-        padding: '20px'
     }
 })
 
@@ -151,12 +150,14 @@ class RequestPage extends Component {
                     
                     <div>{ requestData ? requestData[1].map(message => {
                             return (
-                                    <Paper zDepth={1} className={css(Styles.paper)}>
-                                        <div>{message.loginEMail}</div>
-                                        <span style={{float: 'left'}}>{message.addDate}</span>
-                             
-                                        <div>{message.text}</div>
-                                     </Paper>
+                                <Paper zDepth={1} className={css(Styles.paper)}>
+                                    <div style={{padding: '10px 20px', background: 'rgba(219, 201, 243, 0.34902)'}}>
+                                        <span >{message.loginEMail}</span>
+                                        <span style={{float: 'right'}}>{message.addDate}</span>
+                                    </div>
+                                    <div style={{padding: '20px'}}>{message.text}</div>
+                                 </Paper>
+                                    
                             )
                         }) : '' }
                     </div>
