@@ -1,6 +1,3 @@
-import 'whatwg-fetch' //polyfill
-// ------------------------------
-
 const apiUrl = 'https://admin7.azurewebsites.net'
 
 const requestOptions = {

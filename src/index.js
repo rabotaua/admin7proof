@@ -15,6 +15,15 @@ injectTapEventPlugin();
 
 //material-ui
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+
+const muiTheme = getMuiTheme({
+    palette: {
+        textColor: 'rgba(0,0,0,0.87)',
+        //primary1Color: 'rgba(0,0,0,0.87)'
+    },
+})
+
 
 import authHighOrderComponent from './Components/authHoc'
 import {signOutApi} from './Utils/fetchApi'
@@ -25,8 +34,9 @@ const signOut = () => {
     signOutApi().then(() => browserHistory['replace']('/login'))
 }
 
+
 ReactDOM.render(
-    <MuiThemeProvider>
+    <MuiThemeProvider muiTheme={muiTheme}>
         <Router history={browserHistory}>
             <Route path="/" component={Layout}>
                 <IndexRoute component={authHighOrderComponent(MainPage)}/>

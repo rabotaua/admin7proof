@@ -1,11 +1,12 @@
 import React, {Component} from "react"
-import Sidebar from '../Components/Sidebar'
+import Header from '../Components/Header'
+
 
 export default class MainPage extends Component {
     render() {
         return (
             <main>
-                <Sidebar />
+                <Header />
                 {this.props.children}
             </main>
         )

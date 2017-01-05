@@ -2,25 +2,22 @@ import React, {Component} from "react"
 import {Link} from "react-router"
 import './Sidebar.css'
 
-
+import AppBar from 'material-ui/AppBar'
 import Drawer from 'material-ui/Drawer'
-// import FlatButton from 'material-ui/FlatButton'
 import MenuItem from 'material-ui/MenuItem'
+import IconButton from 'material-ui/IconButton'
+import NavigationClose from 'material-ui/svg-icons/navigation/close'
 
 export default class Sidebar extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {open: true};
-    }
-
-    handleToggle = () => this.setState({open: !this.state.open});
-
     render() {
-
         return (
             <div>
-                <Drawer open={this.state.open}>
+                <Drawer docked={false} open={this.props.open} onRequestChange={this.props.openCloseCallback}>
+
+                    <AppBar title="RUA - admin7" iconElementLeft={<IconButton><NavigationClose
+                        onClick={this.props.openCloseCallback}/></IconButton>}/>
+
                     <MenuItem
                         containerElement={<Link to="/"/>}
                         primaryText="Main page"/>
@@ -32,10 +29,10 @@ export default class Sidebar extends Component {
                         primaryText="No page"/>
 
                     { localStorage.getItem('auth') ?
-                        <MenuItem containerElement={<Link to="/requests/open"/>} primaryText="Open requests"/> : "" }
+                        <MenuItem containerElement={<Link to="/requests/open"/>} primaryText="Open requests"/> : '' }
 
                     { localStorage.getItem('auth') ?
-                        <MenuItem containerElement={<Link to="/signout"/>} primaryText="Sign out"/> : "" }
+                        <MenuItem containerElement={<Link to="/signout"/>} primaryText="Sign out"/> : '' }
 
                 </Drawer>
             </div>
