@@ -25,18 +25,33 @@ export default class Header extends Component {
 
     render() {
 
+        const userNameStyle = {
+            color: '#fff',
+            fontSize: '19px',
+            position: 'relative',
+            top: '-5px',
+            marginRight: '5px'
+        }
+
         const Logged = () => (
-            <IconMenu iconStyle={{color: '#fff'}}
-                      iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
-                      targetOrigin={{horizontal: 'right', vertical: 'top'}}
-                      anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-            >
-                <MenuItem primaryText="Статистика"/>
-
+            <div>
                 { localStorage.getItem('auth') ?
-                    <MenuItem primaryText="Выйти" containerElement={<Link to="/signout"/>}/> : '' }
+                    <span style={userNameStyle }>{localStorage.getItem('userName')}</span> : '' }
 
-            </IconMenu>
+                <IconMenu
+                    iconStyle={{color: '#fff'}}
+                    iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+                    targetOrigin={{horizontal: 'right', vertical: 'top'}}
+                    anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+                >
+
+                    <MenuItem primaryText="Статистика" containerElement={<Link to="/"/>}/>
+
+                    { localStorage.getItem('auth') ?
+                        <MenuItem primaryText="Выйти" containerElement={<Link to="/signout"/>}/> : '' }
+
+                </IconMenu>
+            </div>
         )
 
         return <div>
