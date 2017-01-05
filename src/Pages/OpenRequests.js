@@ -2,7 +2,19 @@ import React, {Component} from "react"
 import {getListApi} from '../Utils/fetchApi'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 import {Link} from 'react-router'
+import {StyleSheet, css} from 'aphrodite'
 
+const tableStyles = StyleSheet.create({
+    link: {
+        'text-decoration': 'none',
+        color: '#00695C',
+        'font-weight': 'bold'
+    },
+    th: {
+        color: '#00695C',
+        'font-weight': 'bold'
+    }
+})
 
 export default class OpenRequests extends Component {
 
@@ -38,34 +50,31 @@ export default class OpenRequests extends Component {
 
         const {list, filter} = this.state
 
-        const linkStyle = {color: 'blue', marginTop: 50, marginLeft: 20}
+        const linkStyle = {color: '#26A69A', marginTop: 50, marginRight: 20, 'text-decoration': 'none'}
 
         return (
-            <div style={{marginLeft: 300}}>
-                <br/><br/>
-                <div>Открытые заявки</div>
-                <br/><br/><br/>
+            <div>
+                
+                <h1 style={{color: '#00695C', padding: '0 0 0 20px', 'text-transform' : 'uppercase'}}>Открытые заявки</h1>
 
-                <a href="#employers" onClick={() => this.changeType(1)}
-                   style={Object.assign({}, linkStyle, filter === 1 ? {color: 'red'} : '')}>Работодатели
-                </a>
+                <div style={{'background-color' : '#E0F2F1', padding: '20px'}}>
+                    <a href="#employers" onClick={() => this.changeType(1)}
+                       style={Object.assign({}, linkStyle, filter === 1 ? {color: '#BF360C'} : '')}>Работодатели
+                    </a>
 
-                <a href="#jobsearchers" onClick={() => this.changeType(2)}
-                   style={Object.assign({}, linkStyle, filter === 2 ? {color: 'red'} : '')}>Соискатели
-                </a>
-
-                <br/>
-                <br/>
-
+                    <a href="#jobsearchers" onClick={() => this.changeType(2)}
+                       style={Object.assign({}, linkStyle, filter === 2 ? {color: '#BF360C'} : '')}>Соискатели
+                    </a>
+                </div>
                 <Table>
                     <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
                         <TableRow>
-                            <TableHeaderColumn>ID заявки</TableHeaderColumn>
-                            <TableHeaderColumn>ID блокнота</TableHeaderColumn>
-                            <TableHeaderColumn>Email</TableHeaderColumn>
-                            <TableHeaderColumn>Тема</TableHeaderColumn>
-                            <TableHeaderColumn>Подтема</TableHeaderColumn>
-                            <TableHeaderColumn>Состояние</TableHeaderColumn>
+                            <TableHeaderColumn className={css(tableStyles.th)}>ID заявки</TableHeaderColumn>
+                            <TableHeaderColumn className={css(tableStyles.th)}>ID блокнота</TableHeaderColumn>
+                            <TableHeaderColumn className={css(tableStyles.th)}>Email</TableHeaderColumn>
+                            <TableHeaderColumn className={css(tableStyles.th)}>Тема</TableHeaderColumn>
+                            <TableHeaderColumn className={css(tableStyles.th)}>Подтема</TableHeaderColumn>
+                            <TableHeaderColumn className={css(tableStyles.th)}>Состояние</TableHeaderColumn>
                         </TableRow>
                     </TableHeader>
                     <TableBody displayRowCheckbox={false}>
@@ -73,7 +82,7 @@ export default class OpenRequests extends Component {
                         ? list[0].map(request => {
                             return (
                                 <TableRow key={request.requestID}>
-                                    <TableRowColumn><Link
+                                    <TableRowColumn><Link className={css(tableStyles.link)}
                                         to={`/request/${request.requestID}`}>{request.requestID}</Link></TableRowColumn>
                                     <TableRowColumn>{request.notebookID}</TableRowColumn>
                                     <TableRowColumn>{request.eMail}</TableRowColumn>
@@ -84,7 +93,7 @@ export default class OpenRequests extends Component {
                             )
                         })
                         : <tr>
-                            <td>LOADING...</td>
+                            <td style={{padding: '20px'}}>LOADING...</td>
                         </tr> }
                     </TableBody>
                 </Table>
