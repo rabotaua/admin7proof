@@ -3,6 +3,9 @@ import validator from 'validator'
 import {browserHistory} from 'react-router'
 import {loginApi} from '../Utils/fetchApi'
 
+import TextField from 'material-ui/TextField'
+import FlatButton from 'material-ui/FlatButton'
+import Paper from 'material-ui/Paper'
 
 
 export default class LoginPage extends Component {
@@ -11,10 +14,11 @@ export default class LoginPage extends Component {
         super()
 
         this.state = {
-            validateError: '',
             emailVal: '',
             passVal: '',
-            rememberMeVal: '',
+            validateEmailErr: '',
+            validatePassErr: '',
+            authError: ''
         }
     }
 
@@ -28,22 +32,30 @@ export default class LoginPage extends Component {
 
         e.preventDefault();
 
-        const {username, password, rememberMe} = this.refs;
+        const {username, password} = this.refs;
 
-        if (validator.isEmpty(username.value) || validator.isEmpty(password.value)) {
-            this.setState({validateError: 'Empty fields!'})
+        if (validator.isEmpty(username.input.value)) {
+            this.setState({validateEmailErr: 'Заполните поле'})
+            return false;
+        } else {
+            this.setState({validateEmailErr: ''})
+        }
+
+        if (!validator.isEmail(username.input.value)) {
+            this.setState({validateEmailErr: 'E-Mail неверный!'})
             return false;
         }
 
-        if (!validator.isEmail(username.value)) {
-            this.setState({validateError: 'Not valid email!'})
+        if (validator.isEmpty(password.input.value)) {
+            this.setState({validatePassErr: 'Заполните поле'})
             return false;
+        } else {
+            this.setState({validatePassErr: ''})
         }
 
         const fetchBody = JSON.stringify({
-            username: username.value,
-            password: password.value,
-            remember: rememberMe.checked
+            username: username.input.value,
+            password: password.input.value
         })
 
         loginApi(fetchBody)
@@ -53,26 +65,43 @@ export default class LoginPage extends Component {
                     browserHistory['push']('/');
                 }
                 else {
-                    this.setState({validateError: 'Not valid login or password!'})
+                    this.setState({authError: 'Логин или пароль неправильные'})
                 }
             })
     }
 
     render() {
+
+        const {validateEmailErr, validatePassErr} = this.state;
+
+        const inputStyle = {width: '100%', display: 'block'}
         return (
-            <form action="#" style={{margin: '100px 530px'}}>
-                <p>Login</p>
-                <input type="email" name="email" ref="username"/>
-                <p>Password</p>
-                <input type="password" name="password" ref="password"/>
-                <p>Remember me</p>
-                <input type="checkbox" name="rememberMe" ref="rememberMe"/>
-                <br/><br/>
-                <button onClick={this.login.bind(this)} type="submit">Send</button>
+            <form action="#" style={{margin: '100px auto', width: '500px'}}>
 
-                <br /><br />
+                <Paper zDepth={1} style={{padding: '10px 30px'}}>
+                    <TextField
+                        style={inputStyle}
+                        floatingLabelText="Логин:"
+                        type="email" name="email" ref="username"
+                        errorText={ validateEmailErr ? validateEmailErr : '' }
+                    />
+                    <TextField
+                        style={inputStyle}
+                        floatingLabelText="Пароль:"
+                        type="password" name="password" ref="password"
+                        errorText={ validatePassErr ? validatePassErr : '' }
+                    />
 
-                { this.state.validateError ? <span style={{color: 'red'}}>{this.state.validateError}</span> : '' }
+                    <div style={{paddingTop: 20, textAlign: 'center'}}>
+                        <FlatButton primary={true} type="submit" onClick={this.login.bind(this)}>ВОЙТИ</FlatButton>
+                    </div>
+
+                    <br />
+
+                    { this.state.authError ? <span style={{color: 'red'}}>{this.state.authError}</span> : '' }
+
+                </Paper>
+
             </form>
         );
     }
