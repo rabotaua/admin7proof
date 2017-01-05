@@ -1,6 +1,6 @@
 import React, {Component} from "react"
 import {getRequestDataApi} from '../Utils/fetchApi'
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
+import {Table, TableBody, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 import Paper from 'material-ui/Paper';
 import {StyleSheet, css} from 'aphrodite'
 
@@ -145,7 +145,7 @@ class RequestPage extends Component {
                     }
 
                     <br/>
-                    <h2 style={{color: 'rgb(124, 127, 148)', 'text-transform' : 'uppercase'}}>MESSAGES:</h2>
+                    <h2 style={{color: 'rgb(124, 127, 148)', textTransform: 'uppercase'}}>MESSAGES:</h2>
 
                     
                     <div>{ requestData ? requestData[1].map(message => {
@@ -163,7 +163,7 @@ class RequestPage extends Component {
                     </div>
                    
 
-                    
+
 
                 </div>
             </div>
