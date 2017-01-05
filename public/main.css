@@ -14,7 +14,8 @@ body {
     font-weight: bold !important;
 }
 
-.requestTable th, 
+.requestTable th,
+.requestTable tr,
 .requestTable td {
 	height: 40px !important;;
 }

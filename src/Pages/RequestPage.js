@@ -7,7 +7,7 @@ import {StyleSheet, css} from 'aphrodite'
 const Styles = StyleSheet.create({
     leftColomn: {
         width: '25%',
-        'margin-right': '30px',
+        marginRight: '30px',
         float: 'left'
     },
     rightColomn: {
@@ -16,8 +16,8 @@ const Styles = StyleSheet.create({
     },
     paper: {
         width: '50%',
-        'margin-top': '20px',
-        padding: '20px'
+        marginTop: '20px',
+
     }
 })
 
@@ -51,7 +51,7 @@ class RequestPage extends Component {
 
         return (
             <div style={{padding: '0 20px 20px'}}>
-                <h1 style={{color: 'rgb(124, 127, 148)', 'text-transform': 'uppercase'}}>Request -
+                <h1 style={{color: 'rgb(124, 127, 148)', textTransform: 'uppercase'}}>Request -
                     #{this.context.router.params['requestId']}</h1>
 
                 <div>
@@ -153,11 +153,14 @@ class RequestPage extends Component {
                     <div>{ requestData ? requestData[1].map(message => {
                             return (
                                 <Paper zDepth={1} className={css(Styles.paper)}>
-                                        <div>{message.loginEMail}</div>
-                                        <span style={{float: 'left'}}>{message.addDate}</span>
-                             
-                                        <div>{message.text}</div>
-                                </Paper>
+                                    <div style={{padding: '10px 20px', background: 'rgba(219, 201, 243, 0.34902)'}}>
+                                        <span >{message.loginEMail}</span>
+                                        <span style={{float: 'right'}}>{message.addDate}</span>
+                                    </div>
+                                    <div style={{padding: '20px'}}>{message.text}</div>
+                                 </Paper>
+                                    
+
                             )
                         }) : '' }
                     </div>

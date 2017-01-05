@@ -73,7 +73,7 @@ class RequestsList extends Component {
         const {list, type} = this.state
 
         const iconStyle = {
-            color: '#3F51B5',
+            color: 'rgb(124, 127, 148)',
             height: 40,
             width: 40,
             position: 'relative',
@@ -85,7 +85,7 @@ class RequestsList extends Component {
         return (
 
             <div>
-                <h1 style={{color: '#3F51B5', padding: '0 0 0 20px', textTransform: 'uppercase'}}>
+                <h1 style={{color: 'rgb(124, 127, 148)', padding: '0 0 0 20px', textTransform: 'uppercase', float: 'left'}}>
                     { this.pageType === 'open'
                         ? <span><InWork style={iconStyle}/>Открытые заявки</span>
                         : <span><DoneIcon style={iconStyle}/>Отработанные заявки</span>
@@ -110,7 +110,8 @@ class RequestsList extends Component {
                         </TableRow>
                     </TableHeader>
 
-                    <TableBody displayRowCheckbox={false} stripedRows={true}>
+                    <TableBody displayRowCheckbox={false}>
+
                         { list && list.length > 0
                             ? list[0].map(request =>
                                 <RequestTableRow
