@@ -1,6 +1,20 @@
 import React, {Component} from "react"
 import {getRequestDataApi} from '../Utils/fetchApi'
+import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
+import Paper from 'material-ui/Paper';
+import {StyleSheet, css} from 'aphrodite'
 
+const Styles = StyleSheet.create({
+    leftColomn: {
+        width: '25%',
+        'margin-right': '30px',
+        float: 'left'
+    },
+    rightColomn: {
+        width: '70%',
+        float: 'left'
+    }
+})
 
 class RequestPage extends Component {
 
@@ -31,30 +45,94 @@ class RequestPage extends Component {
         const {requestData} = this.state;
 
         return (
-            <div style={{marginLeft: 300}}>
-                <br/><br/>
-                <h1>Request - #{this.context.router.params['requestId']}</h1>
+            <div style={{padding: '0 20px 20px'}}>
+                <h1 style={{color: '#3F51B5', 'text-transform' : 'uppercase'}}>Request - #{this.context.router.params['requestId']}</h1>
 
                 <div>
                     { requestData
 
                         ? requestData[0].map(request => {
                             return <div key={request.requestID}>
-                                <p><b>Имя:</b> {request.contactPerson}</p>
-                                <p><b>Телефон:</b> {request.contactPhone}</p>
-                                <p><b>Username:</b> {request.userName}</p>
-                                <p><b>Статус:</b> { this.statusWord(request.state) }</p>
-                                <p><b>Email:</b> {request.eMail}</p>
-                                <p><b>Тема:</b> {request.subjectName}</p>
-                                <p><b>Подтема:</b> {request.subSubjectName}</p>
-                                <p><b>Дата:</b> {request.date}</p>
-                                <p><b>Отвественный:</b> {request.responsibleLogin}</p>
-                                <p><b>Название компании:</b> {request.companyName}</p>
-                                <p><b>UserScale:</b> {request.userScale}</p>
-                                <p><b>UserAgent:</b> {request.userAgent}</p>
-                                <p><b>isCookiesTurnOn:</b> {request.isCookiesTurnOn}</p>
-                                <p><b>PageURL:</b> {request.pageURL}</p>
-                                <p><b>IP:</b> {request.ipAddress}</p>
+                                <div className={css(Styles.leftColomn)}>
+                                    <Table className="requestTable">
+                                        <TableBody displayRowCheckbox={false} >
+                                            <TableRow>
+                                                <TableHeaderColumn>Имя:</TableHeaderColumn>
+                                                <TableRowColumn>{request.contactPerson}</TableRowColumn>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableHeaderColumn>Email:</TableHeaderColumn>
+                                                <TableRowColumn>{request.eMail}</TableRowColumn>
+                                            </TableRow>
+                                             <TableRow>
+                                                <TableHeaderColumn>Статус:</TableHeaderColumn>
+                                                <TableRowColumn>{ this.statusWord(request.state) }</TableRowColumn>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableHeaderColumn>Тема:</TableHeaderColumn>
+                                                <TableRowColumn>{request.subjectName}</TableRowColumn>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableHeaderColumn>Подтема:</TableHeaderColumn>
+                                                <TableRowColumn>{request.subSubjectName}</TableRowColumn>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableHeaderColumn>Дата:</TableHeaderColumn>
+                                                <TableRowColumn>{request.date}</TableRowColumn>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableHeaderColumn>Отвественный:</TableHeaderColumn>
+                                                <TableRowColumn>{request.responsibleLogin}</TableRowColumn>
+                                            </TableRow>
+                                        </TableBody>
+                                    </Table>
+                                </div>
+                                <div className={css(Styles.rightColomn)}>
+                                    <Table className="requestTable">
+                                        <TableBody displayRowCheckbox={false}>
+                                             <TableRow>
+                                                <TableHeaderColumn>Название компании:</TableHeaderColumn>
+                                                <TableRowColumn>{request.companyName}</TableRowColumn>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableHeaderColumn>UserScale:</TableHeaderColumn>
+                                                <TableRowColumn>{request.userScale}</TableRowColumn>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableHeaderColumn>UserAgent:</TableHeaderColumn>
+                                                <TableRowColumn>{request.userAgent}</TableRowColumn>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableHeaderColumn>isCookiesTurnOn:</TableHeaderColumn>
+                                                <TableRowColumn>{request.isCookiesTurnOn}</TableRowColumn>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableHeaderColumn>PageURL:</TableHeaderColumn>
+                                                <TableRowColumn>{request.pageURL}</TableRowColumn>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableHeaderColumn>IP:</TableHeaderColumn>
+                                                <TableRowColumn>{request.ipAddress}</TableRowColumn>
+                                            </TableRow>
+                                        </TableBody>
+                                    </Table>
+                                </div>
+                                <div style={{clear: 'both'}}></div>
+                                <div className={css(Styles.leftColomn)}>
+                                    <Table className="requestTable">
+                                        <TableBody displayRowCheckbox={false}>
+                                            <TableRow style={{'background-color': 'rgba(219, 201, 243, 0.34902)'}}>
+                                                <TableHeaderColumn >Username:</TableHeaderColumn>
+                                                <TableHeaderColumn>Телефон:</TableHeaderColumn>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableRowColumn>{request.userName}</TableRowColumn>
+                                                <TableRowColumn>{request.contactPhone}</TableRowColumn>
+                                            </TableRow>
+                                        </TableBody>
+                                    </Table>
+                                </div>
+                                <div style={{clear: 'both'}}></div>
                             </div>
                         })
 
@@ -62,9 +140,22 @@ class RequestPage extends Component {
 
                     }
 
-                    <br/><br/><br/><br/>
-                    <h2>MESSAGES:</h2>
+                    <br/>
+                    <h2 style={{color: '#3F51B5', 'text-transform' : 'uppercase'}}>MESSAGES:</h2>
 
+                    
+                        <div>{ requestData ? requestData[1].map(message => {
+                                return (
+                                        <Paper zDepth={1}>
+                                        <div>{message.loginEMail}</div>
+                                        <span style={{float: 'left'}}>{message.addDate}</span>
+                             
+                                        <div>{message.text}</div>
+                                         </Paper>
+                                )
+                            }) : '' }
+                        </div>
+                   
 
                     <table style={{border: '1px solid #ccc'}}>
                         { requestData ? requestData[1].map(message => {

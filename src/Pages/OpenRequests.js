@@ -2,7 +2,23 @@ import React, {Component} from "react"
 import {getListApi} from '../Utils/fetchApi'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 import {Link} from 'react-router'
+
 import SearchComponent from '../Components/Search'
+
+
+import {StyleSheet, css} from 'aphrodite'
+
+const tableStyles = StyleSheet.create({
+    link: {
+        'text-decoration': 'none',
+        color: '#283593',
+        'font-weight': 'bold'
+    },
+    th: {
+        color: '#283593',
+        'font-weight': 'bold'
+    }
+})
 
 
 export default class OpenRequests extends Component {
@@ -49,49 +65,50 @@ export default class OpenRequests extends Component {
 
         const {list, type} = this.state
 
-        const linkStyle = {color: 'blue', marginTop: 50, marginLeft: 20}
+        const linkStyle = {color: '#CE93D8', marginTop: 50, marginRight: 20, 'text-decoration': 'none'}
 
         return (
-            <div style={{marginLeft: 300}}>
-                <br/><br/>
-                <div>Открытые заявки</div>
-                <br/><br/><br/>
 
-                <a href="#employers" onClick={() => this.changeType(2)}
-                   style={Object.assign({}, linkStyle, type === 2 ? {color: 'red'} : '')}>Работодатели
-                </a>
+            <div>
+                
+                <h1 style={{color: '#3F51B5', padding: '0 0 0 20px', 'text-transform' : 'uppercase'}}>Открытые заявки</h1>
 
-                <a href="#jobsearchers" onClick={() => this.changeType(1)}
-                   style={Object.assign({}, linkStyle, type === 1 ? {color: 'red'} : '')}>Соискатели
-                </a>
+                <div style={{'background-color' : 'rgba(219, 201, 243, 0.35)', padding: '20px'}}>
 
+                    <a href="#employers" onClick={() => this.changeType(2)}
+                       style={Object.assign({}, linkStyle, type === 2 ? {color: '#3D5AFE'} : '')}>Работодатели
+                    </a>
+
+                    <a href="#jobsearchers" onClick={() => this.changeType(1)}
+                       style={Object.assign({}, linkStyle, type === 1 ? {color: '#3D5AFE'} : '')}>Соискатели
+                    </a>
+                </div>
                 <br/>
                 <br/>
-
                 <SearchComponent searchCallback={this.searchItems.bind(this)}
                                  resetCallback={this.searchReset.bind(this)}/>
 
-                <br/><br/>
-
+                <br/>
+                <br/>
 
 
                 <Table>
                     <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
                         <TableRow>
-                            <TableHeaderColumn>ID заявки</TableHeaderColumn>
-                            <TableHeaderColumn>ID блокнота</TableHeaderColumn>
-                            <TableHeaderColumn>Email</TableHeaderColumn>
-                            <TableHeaderColumn>Тема</TableHeaderColumn>
-                            <TableHeaderColumn>Подтема</TableHeaderColumn>
-                            <TableHeaderColumn>Состояние</TableHeaderColumn>
+                            <TableHeaderColumn className={css(tableStyles.th)}>ID заявки</TableHeaderColumn>
+                            <TableHeaderColumn className={css(tableStyles.th)}>ID блокнота</TableHeaderColumn>
+                            <TableHeaderColumn className={css(tableStyles.th)}>Email</TableHeaderColumn>
+                            <TableHeaderColumn className={css(tableStyles.th)}>Тема</TableHeaderColumn>
+                            <TableHeaderColumn className={css(tableStyles.th)}>Подтема</TableHeaderColumn>
+                            <TableHeaderColumn className={css(tableStyles.th)}>Состояние</TableHeaderColumn>
                         </TableRow>
                     </TableHeader>
-                    <TableBody displayRowCheckbox={false}>
+                    <TableBody displayRowCheckbox={false} stripedRows={true}>
                     { list
                         ? list[0].map(request => {
                             return (
                                 <TableRow key={request.requestID}>
-                                    <TableRowColumn><Link
+                                    <TableRowColumn><Link className={css(tableStyles.link)}
                                         to={`/request/${request.requestID}`}>{request.requestID}</Link></TableRowColumn>
                                     <TableRowColumn>{request.notebookID}</TableRowColumn>
                                     <TableRowColumn>{request.eMail}</TableRowColumn>
@@ -102,7 +119,7 @@ export default class OpenRequests extends Component {
                             )
                         })
                         : <tr>
-                            <td>LOADING...</td>
+                            <td style={{padding: '20px'}}>LOADING...</td>
                         </tr> }
                     </TableBody>
                 </Table>
