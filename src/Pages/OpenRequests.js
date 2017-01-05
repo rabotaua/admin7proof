@@ -67,7 +67,7 @@ export default class OpenRequests extends Component {
         return (
 
             <div>
-                <h1 style={{color: 'rgb(124, 127, 148)', padding: '0 0 0 20px', textTransform : 'uppercase'}}>Открытые заявки</h1>
+                <h1 style={{color: 'rgb(124, 127, 148)', padding: '0 0 0 20px', textTransform : 'uppercase', float: 'left'}}>Открытые заявки</h1>
 
 
                 <SearchComponent searchCallback={this.searchItems.bind(this)}

@@ -6,6 +6,7 @@ import {StyleSheet, css} from 'aphrodite'
 const searchFormStyles = StyleSheet.create({
     layout: {
         float: 'right',
+        margin: '20px'
 
     },
     input: {
