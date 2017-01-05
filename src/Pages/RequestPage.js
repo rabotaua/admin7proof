@@ -13,6 +13,11 @@ const Styles = StyleSheet.create({
     rightColomn: {
         width: '70%',
         float: 'left'
+    },
+    paper: {
+        width: '50%',
+        'margin-top' : '20px',
+        padding: '20px'
     }
 })
 
@@ -46,7 +51,7 @@ class RequestPage extends Component {
 
         return (
             <div style={{padding: '0 20px 20px'}}>
-                <h1 style={{color: '#3F51B5', 'text-transform' : 'uppercase'}}>Request - #{this.context.router.params['requestId']}</h1>
+                <h1 style={{color: 'rgb(124, 127, 148)', 'text-transform' : 'uppercase'}}>Request - #{this.context.router.params['requestId']}</h1>
 
                 <div>
                     { requestData
@@ -141,39 +146,23 @@ class RequestPage extends Component {
                     }
 
                     <br/>
-                    <h2 style={{color: '#3F51B5', 'text-transform' : 'uppercase'}}>MESSAGES:</h2>
+                    <h2 style={{color: 'rgb(124, 127, 148)', 'text-transform' : 'uppercase'}}>MESSAGES:</h2>
 
                     
-                        <div>{ requestData ? requestData[1].map(message => {
-                                return (
-                                        <Paper zDepth={1}>
+                    <div>{ requestData ? requestData[1].map(message => {
+                            return (
+                                    <Paper zDepth={1} className={css(Styles.paper)}>
                                         <div>{message.loginEMail}</div>
                                         <span style={{float: 'left'}}>{message.addDate}</span>
                              
                                         <div>{message.text}</div>
-                                         </Paper>
-                                )
-                            }) : '' }
-                        </div>
+                                     </Paper>
+                            )
+                        }) : '' }
+                    </div>
                    
 
-                    <table style={{border: '1px solid #ccc'}}>
-                        { requestData ? requestData[1].map(message => {
-                                return (
-                                    <tbody>
-                                    <tr>
-                                        <th>
-                                            {message.loginEMail}
-                                            <span style={{float: 'left'}}>{message.addDate}</span>
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <td>{message.text}</td>
-                                    </tr>
-                                    </tbody>
-                                )
-                            }) : '' }
-                    </table>
+                    
 
                 </div>
             </div>

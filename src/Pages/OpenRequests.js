@@ -65,13 +65,13 @@ export default class OpenRequests extends Component {
 
         const {list, type} = this.state
 
-        const linkStyle = {color: '#CE93D8', marginTop: 50, marginRight: 20, 'text-decoration': 'none'}
+        const linkStyle = {color: 'rgba(116, 108, 148, 0.65)', marginTop: 50, marginRight: 20, 'text-decoration': 'none'}
 
         return (
 
             <div>
                 
-                <h1 style={{color: '#3F51B5', padding: '0 0 0 20px', 'text-transform' : 'uppercase'}}>Открытые заявки</h1>
+                <h1 style={{color: 'rgb(124, 127, 148)', padding: '0 0 0 20px', 'text-transform' : 'uppercase'}}>Открытые заявки</h1>
 
                 <div style={{'background-color' : 'rgba(219, 201, 243, 0.35)', padding: '20px'}}>
 
