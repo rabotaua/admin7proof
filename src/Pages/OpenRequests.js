@@ -7,11 +7,11 @@ import {StyleSheet, css} from 'aphrodite'
 const tableStyles = StyleSheet.create({
     link: {
         'text-decoration': 'none',
-        color: '#00695C',
+        color: '#283593',
         'font-weight': 'bold'
     },
     th: {
-        color: '#00695C',
+        color: '#283593',
         'font-weight': 'bold'
     }
 })
@@ -50,20 +50,20 @@ export default class OpenRequests extends Component {
 
         const {list, filter} = this.state
 
-        const linkStyle = {color: '#26A69A', marginTop: 50, marginRight: 20, 'text-decoration': 'none'}
+        const linkStyle = {color: '#CE93D8', marginTop: 50, marginRight: 20, 'text-decoration': 'none'}
 
         return (
             <div>
                 
-                <h1 style={{color: '#00695C', padding: '0 0 0 20px', 'text-transform' : 'uppercase'}}>Открытые заявки</h1>
+                <h1 style={{color: '#3F51B5', padding: '0 0 0 20px', 'text-transform' : 'uppercase'}}>Открытые заявки</h1>
 
-                <div style={{'background-color' : '#E0F2F1', padding: '20px'}}>
+                <div style={{'background-color' : 'rgba(219, 201, 243, 0.35)', padding: '20px'}}>
                     <a href="#employers" onClick={() => this.changeType(1)}
-                       style={Object.assign({}, linkStyle, filter === 1 ? {color: '#BF360C'} : '')}>Работодатели
+                       style={Object.assign({}, linkStyle, filter === 1 ? {color: '#3D5AFE'} : '')}>Работодатели
                     </a>
 
                     <a href="#jobsearchers" onClick={() => this.changeType(2)}
-                       style={Object.assign({}, linkStyle, filter === 2 ? {color: '#BF360C'} : '')}>Соискатели
+                       style={Object.assign({}, linkStyle, filter === 2 ? {color: '#3D5AFE'} : '')}>Соискатели
                     </a>
                 </div>
                 <Table>
@@ -77,7 +77,7 @@ export default class OpenRequests extends Component {
                             <TableHeaderColumn className={css(tableStyles.th)}>Состояние</TableHeaderColumn>
                         </TableRow>
                     </TableHeader>
-                    <TableBody displayRowCheckbox={false}>
+                    <TableBody displayRowCheckbox={false} stripedRows={true}>
                     { list
                         ? list[0].map(request => {
                             return (

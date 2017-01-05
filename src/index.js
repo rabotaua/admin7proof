@@ -16,12 +16,12 @@ injectTapEventPlugin();
 //material-ui
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import {teal400} from 'material-ui/styles/colors';
+import {indigo300} from 'material-ui/styles/colors';
 
 const muiTheme = getMuiTheme({
     palette: {
         textColor: 'rgba(0,0,0,0.87)',
-        primary1Color: teal400
+        primary1Color: indigo300
     },
 })
 

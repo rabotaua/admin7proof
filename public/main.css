@@ -7,3 +7,14 @@ body {
     margin: 0;
     padding: 0;
 }
+
+.requestTable th {
+	width: 150px;
+	color: #283593 !important;
+    font-weight: bold !important;
+}
+
+.requestTable th, 
+.requestTable td {
+	height: 40px !important;;
+}
