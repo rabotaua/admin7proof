@@ -20,6 +20,7 @@ export default function authHighOrderComponent(WrappedComp) {
                 checkAuthApi().then(res => res.json())
                     .then(data => {
                         if (data.length > 0) {
+                            localStorage.setItem('userName', data)
                             this.setState({auth: true})
                         }
                         else {
