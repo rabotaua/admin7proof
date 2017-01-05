@@ -6,7 +6,7 @@ import MainPage from "./Pages/Main"
 import AboutPage from "./Pages/About"
 import LoginPage from "./Pages/Login"
 import NotFoundPage from './Pages/404'
-import OpenRequestsPage from './Pages/OpenRequests'
+import RequestsListPage from './Pages/RequestsList'
 import RequestPage from './Pages/RequestPage'
 
 // need for material-ui
@@ -43,7 +43,8 @@ ReactDOM.render(
                 <IndexRoute component={authHighOrderComponent(MainPage)}/>
                 <Route path="/about" component={AboutPage}/>
                 <Route path="/login" component={LoginPage}/>
-                <Route path="/requests/open" component={authHighOrderComponent(OpenRequestsPage)}/>
+                <Route path="/requests/open" component={authHighOrderComponent(RequestsListPage)}/>
+                <Route path="/requests/done" component={authHighOrderComponent(RequestsListPage)}/>
                 <Route path="/request/:requestId" component={authHighOrderComponent(RequestPage)}/>
                 <Route path="/signout" onEnter={signOut}/>
                 <Route path="*" component={NotFoundPage}/>

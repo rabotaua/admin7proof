@@ -30,11 +30,33 @@ export default class Header extends Component {
             fontSize: '19px',
             position: 'relative',
             top: '-5px',
-            marginRight: '5px'
+            marginRight: '5px',
+            borderBottom: '1px dotted #fff',
+            marginLeft: '50px'
+        }
+
+        const buttonStyle = {
+            ...userNameStyle,
+            borderBottom: 'none',
+            fontSize: '15px',
+            top: '10px',
+            marginLeft: 0
         }
 
         const Logged = () => (
             <div>
+
+                { localStorage.getItem('auth') ?
+                    <span>
+                        <FlatButton style={buttonStyle} label="Открытые заявки"
+                                    containerElement={<Link to="/requests/open"/>}/>
+                        <FlatButton style={buttonStyle} label="Отработанные заявки"
+                                    containerElement={<Link to="/requests/done"/>}/>
+                    </span> : '' }
+
+
+
+
                 { localStorage.getItem('auth') ?
                     <span style={userNameStyle }>{localStorage.getItem('userName')}</span> : '' }
 
