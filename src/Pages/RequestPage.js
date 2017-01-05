@@ -158,7 +158,7 @@ class RequestPage extends Component {
                                         <span style={{float: 'right'}}>{message.addDate}</span>
                                     </div>
                                     <div style={{padding: '20px'}}>{message.text}</div>
-                                 </Paper>
+                                </Paper>
                                     
 
                             )

@@ -21,7 +21,7 @@ const searchFormStyles = StyleSheet.create({
     btn: {
         marginLeft: '10px'
     }
-    
+
 })
 
 export default class Search extends Component {
@@ -45,11 +45,16 @@ export default class Search extends Component {
         return (
             <div className={css(searchFormStyles.layout)}>
                 <form action="#search">
-                    <input className={css(searchFormStyles.input)} placeholder="requestId" type="text" name="requestId" ref="requestId"/>
-                    <input className={css(searchFormStyles.input)} placeholder="notebookId" type="text" name="notebookId" ref="notebookId"/>
-                    <input className={css(searchFormStyles.input)} placeholder="eMail of notebook" type="text" name="eMail" ref="eMail"/>
-                    <RaisedButton className={css(searchFormStyles.btn)} primary={true} onClick={this.findItems.bind(this)} type="submit" label="Find" />
-                    <RaisedButton className={css(searchFormStyles.btn)} secondary={true} onClick={this.props.resetCallback} type="reset" label="Reset" />
+                    <input className={css(searchFormStyles.input)} placeholder="ID заявки" type="text" name="requestId"
+                           ref="requestId"/>
+                    <input className={css(searchFormStyles.input)} placeholder="ID блокнота" type="text"
+                           name="notebookId" ref="notebookId"/>
+                    <input className={css(searchFormStyles.input)} placeholder="E-Mail блокнота" type="text"
+                           name="eMail" ref="eMail"/>
+                    <RaisedButton className={css(searchFormStyles.btn)} primary={true}
+                                  onClick={this.findItems.bind(this)} type="submit" label="Искать"/>
+                    <RaisedButton className={css(searchFormStyles.btn)} secondary={true}
+                                  onClick={this.props.resetCallback} type="reset" label="Очистить"/>
                 </form>
             </div>
         )

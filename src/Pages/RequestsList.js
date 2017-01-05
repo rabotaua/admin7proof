@@ -85,7 +85,12 @@ class RequestsList extends Component {
         return (
 
             <div>
-                <h1 style={{color: 'rgb(124, 127, 148)', padding: '0 0 0 20px', textTransform: 'uppercase', float: 'left'}}>
+                <h1 style={{
+                    color: 'rgb(124, 127, 148)',
+                    padding: '0 0 0 20px',
+                    textTransform: 'uppercase',
+                    float: 'left'
+                }}>
                     { this.pageType === 'open'
                         ? <span><InWork style={iconStyle}/>Открытые заявки</span>
                         : <span><DoneIcon style={iconStyle}/>Отработанные заявки</span>

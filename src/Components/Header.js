@@ -7,9 +7,10 @@ import IconMenu from 'material-ui/IconMenu'
 import MenuItem from 'material-ui/MenuItem'
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert'
 import Sidebar from './Sidebar'
-import FlatButton from 'material-ui/FlatButton'
+import FlatButton from 'material-ui/RaisedButton'
+import RaisedButton from 'material-ui/RaisedButton'
 
-export default class Header extends Component {
+class Header extends Component {
 
     constructor() {
         super();
@@ -25,6 +26,17 @@ export default class Header extends Component {
 
     render() {
 
+        if (this.context.router.location.pathname.indexOf('open') !== -1) {
+            this.activeOpenBtn = true
+            this.activeDoneBtn = false
+        } else if (this.context.router.location.pathname.indexOf('done') !== -1) {
+            this.activeOpenBtn = false
+            this.activeDoneBtn = true
+        } else {
+            this.activeOpenBtn = false
+            this.activeDoneBtn = false
+        }
+
         const userNameStyle = {
             color: '#fff',
             fontSize: '19px',
@@ -39,8 +51,8 @@ export default class Header extends Component {
             ...userNameStyle,
             borderBottom: 'none',
             fontSize: '15px',
-            top: '10px',
-            marginLeft: 0
+            top: '-7px',
+            marginLeft: 15
         }
 
         const Logged = () => (
@@ -48,10 +60,10 @@ export default class Header extends Component {
 
                 { localStorage.getItem('auth') ?
                     <span>
-                        <FlatButton style={buttonStyle} label="Открытые заявки"
-                                    containerElement={<Link to="/requests/open"/>}/>
-                        <FlatButton style={buttonStyle} label="Отработанные заявки"
-                                    containerElement={<Link to="/requests/done"/>}/>
+                        <RaisedButton secondary={this.activeOpenBtn} style={buttonStyle} label="Открытые заявки"
+                                      containerElement={<Link to="/requests/open"/>}/>
+                        <RaisedButton secondary={this.activeDoneBtn} style={buttonStyle} label="Отработанные заявки"
+                                      containerElement={<Link to="/requests/done"/>}/>
                     </span> : '' }
 
 
@@ -89,3 +101,9 @@ export default class Header extends Component {
 
     }
 }
+
+Header.contextTypes = {
+    router: React.PropTypes.object.isRequired
+}
+
+export default Header

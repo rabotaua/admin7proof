@@ -19,6 +19,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {indigo300, pink300} from 'material-ui/styles/colors';
 
 const muiTheme = getMuiTheme({
+    // fontFamily: 'Ubuntu, sans-serif',
     palette: {
         textColor: 'rgba(0,0,0,0.87)',
         primary1Color: indigo300,
