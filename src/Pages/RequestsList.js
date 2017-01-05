@@ -2,6 +2,8 @@ import React, {Component} from "react"
 import {getListApi} from '../Utils/fetchApi'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 import CircularProgress from 'material-ui/CircularProgress'
+import DoneIcon from 'material-ui/svg-icons/action/check-circle'
+import InWork from 'material-ui/svg-icons/action/lock-open'
 
 
 import SearchComponent from '../Components/Search'
@@ -23,14 +25,22 @@ const tableStyles = StyleSheet.create({
 })
 
 
-export default class OpenRequests extends Component {
+class RequestsList extends Component {
 
-    constructor() {
-        super();
+    constructor(props, context) {
+        super(props, context);
+
+        this.pageType = '';
+
+        if (this.context.router.location.pathname.indexOf('open') !== -1) {
+            this.pageType = 'open'
+        } else if (this.context.router.location.pathname.indexOf('done') !== -1) {
+            this.pageType = 'done'
+        }
 
         this.state = {
             type: 2,
-            stateIds: '0,1,2,3', //all open request
+            stateIds: this.pageType === 'open' ? '0,1,2,3' : '0,1,2,3,4',
             list: null
         }
     }
@@ -55,30 +65,41 @@ export default class OpenRequests extends Component {
 
     componentWillMount() {
         const {stateIds} = this.state;
-        this.getListRequest({type: 1, stateIds})
+        this.getListRequest({type: 2, stateIds})
     }
 
     render() {
 
         const {list, type} = this.state
 
-
+        const iconStyle = {
+            color: 'rgb(124, 127, 148)',
+            height: 40,
+            width: 40,
+            position: 'relative',
+            top: '-3px',
+            verticalAlign: 'middle',
+            marginRight: 20
+        }
 
         return (
 
             <div>
-                <h1 style={{float: 'left', margin: 0, padding: '25px'}}>Открытые заявки</h1>
+
+
+
+                <h1 style={{float: 'left', margin: 0, padding: '25px'}}>
+                    { this.pageType === 'open'
+                        ? <span><InWork style={iconStyle}/>Открытые заявки</span>
+                        : <span><DoneIcon style={iconStyle}/>Отработанные заявки</span>
+                    }
+                </h1>
 
 
                 <SearchComponent searchCallback={this.searchItems.bind(this)}
-
                                  resetCallback={this.searchReset.bind(this)}/>
                 
                 <TabSwitcher currentType={type} changeTypeCallback={this.changeType.bind(this)}/>
-
-
-              
-
 
                 <Table selectable={false}>
                     <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
@@ -117,6 +138,12 @@ export default class OpenRequests extends Component {
                 </Table>
 
             </div>
-        );
+        )
     }
 }
+
+RequestsList.contextTypes = {
+    router: React.PropTypes.object.isRequired
+}
+
+export default RequestsList

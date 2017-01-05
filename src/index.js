@@ -6,7 +6,7 @@ import MainPage from "./Pages/Main"
 import AboutPage from "./Pages/About"
 import LoginPage from "./Pages/Login"
 import NotFoundPage from './Pages/404'
-import OpenRequestsPage from './Pages/OpenRequests'
+import RequestsListPage from './Pages/RequestsList'
 import RequestPage from './Pages/RequestPage'
 
 // need for material-ui
@@ -19,6 +19,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {indigo300, pink300} from 'material-ui/styles/colors';
 
 const muiTheme = getMuiTheme({
+    // fontFamily: 'Ubuntu, sans-serif',
     palette: {
         textColor: 'rgba(0,0,0,0.87)',
         primary1Color: indigo300,
@@ -44,7 +45,8 @@ ReactDOM.render(
                 <IndexRoute component={authHighOrderComponent(MainPage)}/>
                 <Route path="/about" component={AboutPage}/>
                 <Route path="/login" component={LoginPage}/>
-                <Route path="/requests/open" component={authHighOrderComponent(OpenRequestsPage)}/>
+                <Route path="/requests/open" component={authHighOrderComponent(RequestsListPage)}/>
+                <Route path="/requests/done" component={authHighOrderComponent(RequestsListPage)}/>
                 <Route path="/request/:requestId" component={authHighOrderComponent(RequestPage)}/>
                 <Route path="/signout" onEnter={signOut}/>
                 <Route path="*" component={NotFoundPage}/>

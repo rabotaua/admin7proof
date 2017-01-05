@@ -7,9 +7,10 @@ import IconMenu from 'material-ui/IconMenu'
 import MenuItem from 'material-ui/MenuItem'
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert'
 import Sidebar from './Sidebar'
-import FlatButton from 'material-ui/FlatButton'
+import FlatButton from 'material-ui/RaisedButton'
+import RaisedButton from 'material-ui/RaisedButton'
 
-export default class Header extends Component {
+class Header extends Component {
 
     constructor() {
         super();
@@ -25,16 +26,49 @@ export default class Header extends Component {
 
     render() {
 
+        if (this.context.router.location.pathname.indexOf('open') !== -1) {
+            this.activeOpenBtn = true
+            this.activeDoneBtn = false
+        } else if (this.context.router.location.pathname.indexOf('done') !== -1) {
+            this.activeOpenBtn = false
+            this.activeDoneBtn = true
+        } else {
+            this.activeOpenBtn = false
+            this.activeDoneBtn = false
+        }
+
         const userNameStyle = {
             color: '#fff',
             fontSize: '19px',
             position: 'relative',
             top: '-5px',
-            marginRight: '5px'
+            marginRight: '5px',
+            borderBottom: '1px dotted #fff',
+            marginLeft: '50px'
+        }
+
+        const buttonStyle = {
+            ...userNameStyle,
+            borderBottom: 'none',
+            fontSize: '15px',
+            top: '-7px',
+            marginLeft: 15
         }
 
         const Logged = () => (
             <div>
+
+                { localStorage.getItem('auth') ?
+                    <span>
+                        <RaisedButton secondary={this.activeOpenBtn} style={buttonStyle} label="Открытые заявки"
+                                      containerElement={<Link to="/requests/open"/>}/>
+                        <RaisedButton secondary={this.activeDoneBtn} style={buttonStyle} label="Отработанные заявки"
+                                      containerElement={<Link to="/requests/done"/>}/>
+                    </span> : '' }
+
+
+
+
                 { localStorage.getItem('auth') ?
                     <span style={userNameStyle }>{localStorage.getItem('userName')}</span> : '' }
 
@@ -67,3 +101,9 @@ export default class Header extends Component {
 
     }
 }
+
+Header.contextTypes = {
+    router: React.PropTypes.object.isRequired
+}
+
+export default Header

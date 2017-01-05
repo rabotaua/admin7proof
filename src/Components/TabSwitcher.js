@@ -13,12 +13,12 @@ export default class TabSwitcher extends Component {
 
             <Tabs>
                 <Tab
-                    onClick={() => this.props.changeTypeCallback(2)}
+                    onActive={() => this.props.changeTypeCallback(2)}
                     icon={<EmployerIcon />}
                     label="РАБОТОДАТЕЛИ"
                 />
                 <Tab
-                    onClick={() => this.props.changeTypeCallback(1)}
+                    onActive={() => this.props.changeTypeCallback(1)}
                     icon={<JobsearcherIcon />}
                     label="СОИСКАТЕЛИ"
                 />
