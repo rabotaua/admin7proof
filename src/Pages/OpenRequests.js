@@ -1,22 +1,24 @@
 import React, {Component} from "react"
 import {getListApi} from '../Utils/fetchApi'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
-import {Link} from 'react-router'
+import CircularProgress from 'material-ui/CircularProgress'
+
 
 import SearchComponent from '../Components/Search'
-
+import RequestTableRow from '../Components/RequestTableRow'
+import TabSwitcher from '../Components/TabSwitcher'
 
 import {StyleSheet, css} from 'aphrodite'
 
 const tableStyles = StyleSheet.create({
     link: {
-        'text-decoration': 'none',
+        textDecoration: 'none',
         color: '#283593',
-        'font-weight': 'bold'
+        fontWeight: 'bold'
     },
     th: {
         color: '#283593',
-        'font-weight': 'bold'
+        fontWeight: 'bold'
     }
 })
 
@@ -27,7 +29,7 @@ export default class OpenRequests extends Component {
         super();
 
         this.state = {
-            type: 1,
+            type: 2,
             stateIds: '0,1,2,3', //all open request
             list: null
         }
@@ -56,43 +58,22 @@ export default class OpenRequests extends Component {
         this.getListRequest({type: 1, stateIds})
     }
 
-    statusWord(id) {
-        id = parseInt(id, 10); // eslint swears on the second argument :C   It's a radix argument O_O
-        return id === 1 ? 'открыта' : id === 2 ? 'в работе' : id === 3 ? 'открыта повторно' : id === 4 ? 'закрыта' : ''
-    }
-
     render() {
 
         const {list, type} = this.state
 
-        const linkStyle = {color: '#CE93D8', marginTop: 50, marginRight: 20, 'text-decoration': 'none'}
-
         return (
 
             <div>
-                
-                <h1 style={{color: '#3F51B5', padding: '0 0 0 20px', 'text-transform' : 'uppercase'}}>Открытые заявки</h1>
+                <h1 style={{color: '#3F51B5', padding: '0 0 0 20px', textTransform: 'uppercase'}}>Открытые заявки</h1>
 
-                <div style={{'background-color' : 'rgba(219, 201, 243, 0.35)', padding: '20px'}}>
 
-                    <a href="#employers" onClick={() => this.changeType(2)}
-                       style={Object.assign({}, linkStyle, type === 2 ? {color: '#3D5AFE'} : '')}>Работодатели
-                    </a>
-
-                    <a href="#jobsearchers" onClick={() => this.changeType(1)}
-                       style={Object.assign({}, linkStyle, type === 1 ? {color: '#3D5AFE'} : '')}>Соискатели
-                    </a>
-                </div>
-                <br/>
-                <br/>
                 <SearchComponent searchCallback={this.searchItems.bind(this)}
                                  resetCallback={this.searchReset.bind(this)}/>
+                <br/><br/>
+                <TabSwitcher currentType={type} changeTypeCallback={this.changeType.bind(this)}/>
 
-                <br/>
-                <br/>
-
-
-                <Table>
+                <Table selectable={false}>
                     <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
                         <TableRow>
                             <TableHeaderColumn className={css(tableStyles.th)}>ID заявки</TableHeaderColumn>
@@ -103,24 +84,27 @@ export default class OpenRequests extends Component {
                             <TableHeaderColumn className={css(tableStyles.th)}>Состояние</TableHeaderColumn>
                         </TableRow>
                     </TableHeader>
+
                     <TableBody displayRowCheckbox={false} stripedRows={true}>
-                    { list
-                        ? list[0].map(request => {
-                            return (
-                                <TableRow key={request.requestID}>
-                                    <TableRowColumn><Link className={css(tableStyles.link)}
-                                        to={`/request/${request.requestID}`}>{request.requestID}</Link></TableRowColumn>
-                                    <TableRowColumn>{request.notebookID}</TableRowColumn>
-                                    <TableRowColumn>{request.eMail}</TableRowColumn>
-                                    <TableRowColumn>{request.subjectName}</TableRowColumn>
-                                    <TableRowColumn>{request.subSubjectName}</TableRowColumn>
-                                    <TableRowColumn>{ this.statusWord(request.state) }</TableRowColumn>
-                                </TableRow>
-                            )
-                        })
-                        : <tr>
-                            <td style={{padding: '20px'}}>LOADING...</td>
-                        </tr> }
+                        { list && list.length > 0
+                            ? list[0].map(request =>
+                                <RequestTableRow
+                                    key={request.requestID}
+                                    requestID={request.requestID}
+                                    notebookID={request.notebookID}
+                                    eMail={request.eMail}
+                                    subjectName={request.subjectName}
+                                    subSubjectName={request.subSubjectName}
+                                    state={request.state}
+                                />)
+
+                            : <TableRow>
+                                <TableRowColumn style={{textAlign: 'center', padding: '50px 0'}}>
+                                    <CircularProgress size={80}/>
+                                </TableRowColumn>
+                            </TableRow>
+                        }
+
                     </TableBody>
                 </Table>
 
