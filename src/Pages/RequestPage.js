@@ -6,17 +6,22 @@ import {StyleSheet, css} from 'aphrodite'
 
 const Styles = StyleSheet.create({
     leftColomn: {
-        width: '25%',
-        marginRight: '30px',
+        width: '40%',
         float: 'left'
     },
     rightColomn: {
-        width: '70%',
-        float: 'left'
+        width: '55%',
+        float: 'right'
     },
     paper: {
-        width: '50%',
         marginTop: '20px',
+
+    },
+    container: {
+        maxWidth: '1260px',
+        margin: '0 auto',
+        width: '100%',
+        padding: '0 20px 20px'
 
     }
 })
@@ -50,9 +55,9 @@ class RequestPage extends Component {
         const {requestData} = this.state;
 
         return (
-            <div style={{padding: '0 20px 20px'}}>
-                <h1 style={{color: 'rgb(124, 127, 148)', textTransform: 'uppercase'}}>Request -
-                    #{this.context.router.params['requestId']}</h1>
+            <div className={css(Styles.container)}>
+                <h1>Заявка - #{this.context.router.params['requestId']}
+                </h1>
 
                 <div>
                     { requestData
@@ -60,7 +65,7 @@ class RequestPage extends Component {
                         ? requestData[0].map(request => {
                             return <div key={request.requestID}>
                                 <div className={css(Styles.leftColomn)}>
-                                    <Table className="requestTable">
+                                    <Table className="requestTable" selectable={false}>
                                         <TableBody displayRowCheckbox={false} >
                                             <TableRow>
                                                 <TableHeaderColumn>Имя:</TableHeaderColumn>
@@ -94,7 +99,7 @@ class RequestPage extends Component {
                                     </Table>
                                 </div>
                                 <div className={css(Styles.rightColomn)}>
-                                    <Table className="requestTable">
+                                    <Table className="requestTable" selectable={false}>
                                         <TableBody displayRowCheckbox={false}>
                                              <TableRow>
                                                 <TableHeaderColumn>Название компании:</TableHeaderColumn>
@@ -124,12 +129,13 @@ class RequestPage extends Component {
                                     </Table>
                                 </div>
                                 <div style={{clear: 'both'}}></div>
+                                <hr />
                                 <div className={css(Styles.leftColomn)}>
-                                    <Table className="requestTable">
+                                    <Table selectable={false}>
                                         <TableBody displayRowCheckbox={false}>
-                                            <TableRow style={{'background-color': 'rgba(219, 201, 243, 0.34902)'}}>
-                                                <TableHeaderColumn >Username:</TableHeaderColumn>
-                                                <TableHeaderColumn>Телефон:</TableHeaderColumn>
+                                            <TableRow >
+                                                <TableHeaderColumn style={{'color': '#EC407A', fontWeight: 'bold'}}>Username:</TableHeaderColumn>
+                                                <TableHeaderColumn style={{'color': '#EC407A', fontWeight: 'bold'}}>Телефон:</TableHeaderColumn>
                                             </TableRow>
                                             <TableRow>
                                                 <TableRowColumn>{request.userName}</TableRowColumn>
@@ -147,7 +153,7 @@ class RequestPage extends Component {
                     }
 
                     <br/>
-                    <h2 style={{color: 'rgb(124, 127, 148)', textTransform: 'uppercase'}}>MESSAGES:</h2>
+                    <h2>Сообщения</h2>
 
 
                     <div>{ requestData ? requestData[1].map(message => {

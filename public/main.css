@@ -9,7 +9,7 @@ body {
 }
 
 .requestTable th {
-	width: 150px;
+	width: 100px;
 	color: #283593 !important;
     font-weight: bold !important;
 }
@@ -18,4 +18,11 @@ body {
 .requestTable tr,
 .requestTable td {
 	height: 40px !important;;
+}
+
+h1, h2 {
+	color: rgb(124, 127, 148);
+	/*padding: 0 25px;*/
+	/*margin: 0;*/
+	text-transform: uppercase;
 }
