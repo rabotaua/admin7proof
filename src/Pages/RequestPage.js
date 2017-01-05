@@ -1,6 +1,6 @@
 import React, {Component} from "react"
 import {getRequestDataApi} from '../Utils/fetchApi'
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
+import {Table, TableBody, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 import Paper from 'material-ui/Paper';
 import {StyleSheet, css} from 'aphrodite'
 
@@ -16,7 +16,7 @@ const Styles = StyleSheet.create({
     },
     paper: {
         width: '50%',
-        'margin-top' : '20px',
+        'margin-top': '20px',
         padding: '20px'
     }
 })
@@ -51,7 +51,8 @@ class RequestPage extends Component {
 
         return (
             <div style={{padding: '0 20px 20px'}}>
-                <h1 style={{color: 'rgb(124, 127, 148)', 'text-transform' : 'uppercase'}}>Request - #{this.context.router.params['requestId']}</h1>
+                <h1 style={{color: 'rgb(124, 127, 148)', 'text-transform': 'uppercase'}}>Request -
+                    #{this.context.router.params['requestId']}</h1>
 
                 <div>
                     { requestData
@@ -148,20 +149,18 @@ class RequestPage extends Component {
                     <br/>
                     <h2 style={{color: 'rgb(124, 127, 148)', textTransform: 'uppercase'}}>MESSAGES:</h2>
 
-                    
+
                     <div>{ requestData ? requestData[1].map(message => {
                             return (
-                                    <Paper zDepth={1} className={css(Styles.paper)}>
+                                <Paper zDepth={1} className={css(Styles.paper)}>
                                         <div>{message.loginEMail}</div>
                                         <span style={{float: 'left'}}>{message.addDate}</span>
                              
                                         <div>{message.text}</div>
-                                     </Paper>
+                                </Paper>
                             )
                         }) : '' }
                     </div>
-                   
-
 
 
                 </div>

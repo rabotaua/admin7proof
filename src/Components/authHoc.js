@@ -35,7 +35,8 @@ export default function authHighOrderComponent(WrappedComp) {
         }
 
         render() {
-            return this.state.auth === true ? <WrappedComp /> : <CircularProgress style={{margin: '100px 50px'}}/>
+            return this.state.auth === true ? <WrappedComp /> :
+                <div style={{margin: '200px 0', textAlign: 'center'}}><CircularProgress size={120}/></div>
         }
     }
 }
