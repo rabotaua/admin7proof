@@ -57,12 +57,12 @@ export default class OpenRequests extends Component {
                 <div>Открытые заявки</div>
                 <br/><br/><br/>
 
-                <a href="#employers" onClick={() => this.changeType(1)}
-                   style={Object.assign({}, linkStyle, type === 1 ? {color: 'red'} : '')}>Работодатели
+                <a href="#employers" onClick={() => this.changeType(2)}
+                   style={Object.assign({}, linkStyle, type === 2 ? {color: 'red'} : '')}>Работодатели
                 </a>
 
-                <a href="#jobsearchers" onClick={() => this.changeType(2)}
-                   style={Object.assign({}, linkStyle, type === 2 ? {color: 'red'} : '')}>Соискатели
+                <a href="#jobsearchers" onClick={() => this.changeType(1)}
+                   style={Object.assign({}, linkStyle, type === 1 ? {color: 'red'} : '')}>Соискатели
                 </a>
 
                 <br/>
