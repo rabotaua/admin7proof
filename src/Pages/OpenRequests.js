@@ -2,6 +2,7 @@ import React, {Component} from "react"
 import {getListApi} from '../Utils/fetchApi'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 import {Link} from 'react-router'
+import SearchComponent from '../Components/Search'
 
 
 export default class OpenRequests extends Component {
@@ -10,23 +11,34 @@ export default class OpenRequests extends Component {
         super();
 
         this.state = {
-            filter: 1,
+            type: 1,
             stateIds: '0,1,2,3', //all open request
             list: null
         }
     }
 
-    getListRequest(filter, stateIds) {
-        getListApi(filter, stateIds).then(res => res.json()).then(data => this.setState({list: data}))
+    getListRequest(params /* object with parameters */) {
+        getListApi(params).then(res => res.json()).then(data => this.setState({list: data}))
     }
 
     changeType(type = 1) {
-        this.setState({filter: type, list: null})
-        this.getListRequest(type, this.state.stateIds)
+        this.setState({type: type, list: null})
+        const {stateIds} = this.state;
+        this.getListRequest({type, stateIds})
+    }
+
+    searchItems(params) {
+        const {requestId, notebookId, eMail} = params;
+        this.getListRequest(params);
+    }
+
+    searchReset() {
+        this.changeType(this.state.type)
     }
 
     componentWillMount() {
-        this.getListRequest(1, this.state.stateIds)
+        const {stateIds} = this.state;
+        this.getListRequest({type: 1, stateIds})
     }
 
     statusWord(id) {
@@ -36,7 +48,7 @@ export default class OpenRequests extends Component {
 
     render() {
 
-        const {list, filter} = this.state
+        const {list, type} = this.state
 
         const linkStyle = {color: 'blue', marginTop: 50, marginLeft: 20}
 
@@ -47,15 +59,22 @@ export default class OpenRequests extends Component {
                 <br/><br/><br/>
 
                 <a href="#employers" onClick={() => this.changeType(1)}
-                   style={Object.assign({}, linkStyle, filter === 1 ? {color: 'red'} : '')}>Работодатели
+                   style={Object.assign({}, linkStyle, type === 1 ? {color: 'red'} : '')}>Работодатели
                 </a>
 
                 <a href="#jobsearchers" onClick={() => this.changeType(2)}
-                   style={Object.assign({}, linkStyle, filter === 2 ? {color: 'red'} : '')}>Соискатели
+                   style={Object.assign({}, linkStyle, type === 2 ? {color: 'red'} : '')}>Соискатели
                 </a>
 
                 <br/>
                 <br/>
+
+                <SearchComponent searchCallback={this.searchItems.bind(this)}
+                                 resetCallback={this.searchReset.bind(this)}/>
+
+                <br/><br/>
+
+
 
                 <Table>
                     <TableHeader adjustForCheckbox={false} displaySelectAll={false}>

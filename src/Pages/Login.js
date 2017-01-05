@@ -76,7 +76,7 @@ export default class LoginPage extends Component {
 
         const inputStyle = {width: '100%', display: 'block'}
         return (
-            <form action="#" style={{margin: '100px auto', width: '500px'}}>
+            <form action="#signin" style={{margin: '100px auto', width: '500px'}}>
 
                 <Paper zDepth={1} style={{padding: '10px 30px'}}>
                     <TextField

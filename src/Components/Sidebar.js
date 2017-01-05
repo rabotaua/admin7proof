@@ -35,10 +35,6 @@ export default class Sidebar extends Component {
                         <MenuItem onTouchTap={openCloseCallback} containerElement={<Link to="/requests/open"/>}
                                   primaryText="Open requests"/> : '' }
 
-                    { localStorage.getItem('auth') ?
-                        <MenuItem onTouchTap={openCloseCallback} containerElement={<Link to="/signout"/>}
-                                  primaryText="Sign out"/> : '' }
-
                 </Drawer>
             </div>
         );
