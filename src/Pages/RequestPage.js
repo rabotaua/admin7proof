@@ -20,7 +20,7 @@ const Styles = StyleSheet.create({
     },
     paper: {
         marginTop: '20px',
-
+        // border: '1px solid #ccc'
     },
     container: {
         maxWidth: '1260px',

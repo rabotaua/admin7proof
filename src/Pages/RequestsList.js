@@ -86,8 +86,6 @@ class RequestsList extends Component {
 
             <div>
 
-
-
                 <h1 style={{float: 'left', margin: 0, padding: '25px'}}>
                     { this.pageType === 'open'
                         ? <span><InWork style={iconStyle}/>Открытые заявки</span>
@@ -98,8 +96,9 @@ class RequestsList extends Component {
 
                 <SearchComponent searchCallback={this.searchItems.bind(this)}
                                  resetCallback={this.searchReset.bind(this)}/>
-                
-                <TabSwitcher currentType={type} changeTypeCallback={this.changeType.bind(this)}/>
+
+                <TabSwitcher pageType={this.pageType} currentType={type} changeTypeCallback={this.changeType.bind(this)}
+                             totalCount={ list ? list[1][0].totalCount : false }/>
 
                 <Table selectable={false}>
                     <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
@@ -109,7 +108,10 @@ class RequestsList extends Component {
                             <TableHeaderColumn className={css(tableStyles.th)}>Email</TableHeaderColumn>
                             <TableHeaderColumn className={css(tableStyles.th)}>Тема</TableHeaderColumn>
                             <TableHeaderColumn className={css(tableStyles.th)}>Подтема</TableHeaderColumn>
-                            <TableHeaderColumn className={css(tableStyles.th)}>Состояние</TableHeaderColumn>
+                            <TableHeaderColumn className={css(tableStyles.th)}>Статус</TableHeaderColumn>
+                            <TableHeaderColumn className={css(tableStyles.th)}>Ответственный</TableHeaderColumn>
+                            <TableHeaderColumn className={css(tableStyles.th)}>Дата/время</TableHeaderColumn>
+                            <TableHeaderColumn className={css(tableStyles.th)}/>
                         </TableRow>
                     </TableHeader>
 
@@ -125,6 +127,8 @@ class RequestsList extends Component {
                                     subjectName={request.subjectName}
                                     subSubjectName={request.subSubjectName}
                                     state={request.state}
+                                    responsibleLogin={request.responsibleLogin}
+                                    date={request.date}
                                 />)
 
                             : <TableRow>
