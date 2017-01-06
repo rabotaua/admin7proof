@@ -6,6 +6,7 @@ import {FormsyText} from 'formsy-material-ui/lib'
 class LoginForm extends React.Component {
     constructor (props) {
         super(props)
+
         this.state = {
             canSubmit: false
         }
@@ -28,6 +29,7 @@ class LoginForm extends React.Component {
             onInvalid={this.disableSubmitButton}
             onValidSubmit={this.props.onSubmit}>
 
+
             <FormsyText
                 fullWidth={true}
                 name="username"
@@ -45,13 +47,16 @@ class LoginForm extends React.Component {
                 required
             />
 
-            <RaisedButton fullWidth={true} primary={true} type="submit" label="Submit" disabled={!this.state.canSubmit}/>
+            <RaisedButton fullWidth={true} primary={true} type="submit" label="Submit" disabled={!this.state.canSubmit && !this.props.isSubmitting}/>
+            {JSON.stringify(this.props)}
         </Formsy.Form>
     }
 }
 
 LoginForm.propTypes = {
-    onSubmit: React.PropTypes.func.isRequired
+    onSubmit: React.PropTypes.func.isRequired,
+    isSubmitting: React.PropTypes.bool,
+    error: React.PropTypes.object
 }
 
 export default LoginForm
