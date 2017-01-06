@@ -45,3 +45,13 @@ export const getRequestDataApi = (requestId) => {
         ...requestOptions, body: `[{ key: "RequestID", value: ${requestId} }]`
     })
 }
+
+export const setResponsibleApi = (requestId, responsibleLogin) => {
+    const formDataApi = `[{ key: "RequestID", value: "${requestId}" }, { key: "ResponsibleLogin", value: "${responsibleLogin}" }]`
+    return fetch(`${apiUrl}/exec/spAdmin7_Request_SetResponsible`, {...requestOptions, body: formDataApi})
+}
+
+export const setStateApi = (requestId, stateId) => {
+    const formDataApi = `[{ key: "RequestID", value: "${requestId}" }, { key: "State", value: "${stateId}" }]`
+    return fetch(`${apiUrl}/exec/spAdmin7_Request_SetState`, {...requestOptions, body: formDataApi})
+}

@@ -1,10 +1,10 @@
 import React, {Component} from 'react'
 import {TableRow, TableRowColumn} from 'material-ui/Table'
-import RaisedButton from 'material-ui/RaisedButton'
 import {Link} from 'react-router'
 import {StyleSheet, css} from 'aphrodite'
 import StatusWord from '../Components/StatusWord'
 import {dateTimeFormat} from '../Utils/dateTimeFormat'
+import TakeJobButton from '../Components/TakeJobButton'
 
 
 const tableStyles = StyleSheet.create({
@@ -18,23 +18,18 @@ const tableStyles = StyleSheet.create({
 
 export default class RequestTableRow extends Component {
 
-    takeJobCheck() {
-        let {responsibleLogin, state} = this.props;
-
-        if (state === 1 || state === 3) {
-            if (localStorage.getItem('userName') !== responsibleLogin) {
-                return true
-            }
-        }
-
-        return false
+    checkOwnTickets() {
+        if (this.props.state !== 4 && this.props.responsibleLogin === localStorage.getItem('userName'))
+            return {backgroundColor: 'rgba(197,202,233,0.1)'}
+        else
+            return {}
     }
 
     render() {
         let {requestID, notebookID, eMail, subjectName, subSubjectName, state, responsibleLogin, date} = this.props;
 
         return (
-            <TableRow>
+            <TableRow style={ this.checkOwnTickets() }>
                 <TableRowColumn>
                     <Link className={css(tableStyles.link)} to={`/request/${requestID}`}>
                         {requestID}
@@ -47,8 +42,8 @@ export default class RequestTableRow extends Component {
                 <TableRowColumn><StatusWord statusId={state}/></TableRowColumn>
                 <TableRowColumn><strong>{responsibleLogin}</strong></TableRowColumn>
                 <TableRowColumn>{ dateTimeFormat(date) }</TableRowColumn>
-                <TableRowColumn>
-                    { this.takeJobCheck() ? <RaisedButton primary={true} label="Взять в работу"/> : '' }
+                <TableRowColumn style={{textAlign: 'center'}}>
+                    <TakeJobButton requestID={requestID} responsibleLogin={responsibleLogin} state={state}/>
                 </TableRowColumn>
             </TableRow>
         )

@@ -2,10 +2,11 @@ import React, {Component} from "react"
 import {getRequestDataApi} from '../Utils/fetchApi'
 import {Table, TableBody, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 import CircularProgress from 'material-ui/CircularProgress'
-import Paper from 'material-ui/Paper';
 import {StyleSheet, css} from 'aphrodite'
 import StatusWord from '../Components/StatusWord'
 import ChangeSubject from '../Components/ChangeSubject'
+import MessageItem from '../Components/MessageItem'
+import FeedbackForm from '../Components/FeedbackForm'
 import {dateTimeFormat} from '../Utils/dateTimeFormat'
 
 
@@ -21,10 +22,6 @@ const Styles = StyleSheet.create({
     rightColomn: {
         width: '55%',
         float: 'right'
-    },
-    paper: {
-        marginTop: '20px',
-        // border: '1px solid #ccc'
     },
     container: {
         maxWidth: '1260px',
@@ -165,25 +162,12 @@ class RequestPage extends Component {
 
                     }
 
-                    <br/> <br/>
+                    <br/><br/>
 
                     { requestData ? <h2>Сообщения</h2> : '' }
+                    { requestData ? requestData[1].map(message => <MessageItem key={message.id} {...message} />) : '' }
 
-                    <div>{ requestData ? requestData[1].map(message => {
-                            return (
-                                <Paper key={message.id} zDepth={1} className={css(Styles.paper)}>
-                                    <div style={{padding: '10px 20px', background: 'rgba(219, 201, 243, 0.34902)'}}>
-                                        <span >{message.loginEMail}</span>
-                                        <span style={{float: 'right'}}>{message.addDate}</span>
-                                    </div>
-                                    <div style={{padding: '20px'}}>{message.text}</div>
-                                </Paper>
-                                    
-
-                            )
-                        }) : '' }
-                    </div>
-
+                    {/*<FeedbackForm />*/}
 
                 </div>
             </div>
