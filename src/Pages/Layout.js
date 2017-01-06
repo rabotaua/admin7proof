@@ -1,14 +1,11 @@
-import React, {Component} from "react"
-import Header from '../Components/Header'
+import React from "react"
 
-
-export default class MainPage extends Component {
+class Layout extends React.Component {
     render() {
-        return (
-            <main>
-                <Header />
-                {this.props.children}
-            </main>
-        )
+        return <main>
+            {this.props.children}
+        </main>
     }
 }
+
+export default Layout
