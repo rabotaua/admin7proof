@@ -1,13 +1,18 @@
 import React, {Component} from "react"
 import {getRequestDataApi} from '../Utils/fetchApi'
 import {Table, TableBody, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
+import CircularProgress from 'material-ui/CircularProgress'
 import Paper from 'material-ui/Paper';
 import {StyleSheet, css} from 'aphrodite'
+import StatusWord from '../Components/StatusWord'
 
 const Styles = StyleSheet.create({
     leftColomn: {
         width: '40%',
         float: 'left'
+    },
+    leftColomnPersonalInfo: {
+        width: '55%'
     },
     rightColomn: {
         width: '55%',
@@ -46,17 +51,18 @@ class RequestPage extends Component {
         this.getRequestData(this.context.router.params['requestId'])
     }
 
-    statusWord(id) {
-        id = parseInt(id, 10); // eslint swears on the second argument :C   It's a radix argument O_O
-        return id === 1 ? 'открыта' : id === 2 ? 'в работе' : id === 3 ? 'открыта повторно' : id === 4 ? 'закрыта' : ''
-    }
-
     render() {
         const {requestData} = this.state;
+        const personInfoTableHStyle = {
+            'color': '#EC407A',
+            fontWeight: 'bold',
+            width: '150px',
+            borderRight: '1px solid rgb(224, 224, 224)'
+        }
 
         return (
             <div className={css(Styles.container)}>
-                <h1>Заявка - #{this.context.router.params['requestId']}
+                <h1>Заявка #{this.context.router.params['requestId']}
                 </h1>
 
                 <div>
@@ -68,32 +74,24 @@ class RequestPage extends Component {
                                     <Table className="requestTable" selectable={false}>
                                         <TableBody displayRowCheckbox={false} >
                                             <TableRow>
-                                                <TableHeaderColumn>Имя:</TableHeaderColumn>
-                                                <TableRowColumn>{request.contactPerson}</TableRowColumn>
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableHeaderColumn>Email:</TableHeaderColumn>
-                                                <TableRowColumn>{request.eMail}</TableRowColumn>
-                                            </TableRow>
-                                             <TableRow>
-                                                <TableHeaderColumn>Статус:</TableHeaderColumn>
-                                                <TableRowColumn>{ this.statusWord(request.state) }</TableRowColumn>
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableHeaderColumn>Тема:</TableHeaderColumn>
-                                                <TableRowColumn>{request.subjectName}</TableRowColumn>
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableHeaderColumn>Подтема:</TableHeaderColumn>
-                                                <TableRowColumn>{request.subSubjectName}</TableRowColumn>
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableHeaderColumn>Дата:</TableHeaderColumn>
+                                                <TableHeaderColumn>Дата заявки:</TableHeaderColumn>
                                                 <TableRowColumn>{request.date}</TableRowColumn>
                                             </TableRow>
                                             <TableRow>
-                                                <TableHeaderColumn>Отвественный:</TableHeaderColumn>
-                                                <TableRowColumn>{request.responsibleLogin}</TableRowColumn>
+                                                <TableHeaderColumn>ID блокнота:</TableHeaderColumn>
+                                                <TableRowColumn>{request.notebookID}</TableRowColumn>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableHeaderColumn>E-Mail:</TableHeaderColumn>
+                                                <TableRowColumn><a href={`mailto:${request.eMail}`}>{request.eMail}</a></TableRowColumn>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableHeaderColumn>Статус:</TableHeaderColumn>
+                                                <TableRowColumn><StatusWord statusId={request.state}/></TableRowColumn>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableHeaderColumn>Оценка:</TableHeaderColumn>
+                                                <TableRowColumn>{request.userScale}</TableRowColumn>
                                             </TableRow>
                                         </TableBody>
                                     </Table>
@@ -101,44 +99,53 @@ class RequestPage extends Component {
                                 <div className={css(Styles.rightColomn)}>
                                     <Table className="requestTable" selectable={false}>
                                         <TableBody displayRowCheckbox={false}>
-                                             <TableRow>
-                                                <TableHeaderColumn>Название компании:</TableHeaderColumn>
-                                                <TableRowColumn>{request.companyName}</TableRowColumn>
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableHeaderColumn>UserScale:</TableHeaderColumn>
-                                                <TableRowColumn>{request.userScale}</TableRowColumn>
-                                            </TableRow>
                                             <TableRow>
                                                 <TableHeaderColumn>UserAgent:</TableHeaderColumn>
                                                 <TableRowColumn>{request.userAgent}</TableRowColumn>
                                             </TableRow>
                                             <TableRow>
-                                                <TableHeaderColumn>isCookiesTurnOn:</TableHeaderColumn>
-                                                <TableRowColumn>{request.isCookiesTurnOn}</TableRowColumn>
+                                                <TableHeaderColumn>Cookies:</TableHeaderColumn>
+                                                <TableRowColumn>{request.isCookiesTurnOn ? 'включены' : 'отключены' }</TableRowColumn>
                                             </TableRow>
                                             <TableRow>
-                                                <TableHeaderColumn>PageURL:</TableHeaderColumn>
-                                                <TableRowColumn>{request.pageURL}</TableRowColumn>
+                                                <TableHeaderColumn>URL:</TableHeaderColumn>
+                                                <TableRowColumn><a target="_blank"
+                                                                   href={`http://rabota.ua${request.pageURL}`}>{request.pageURL}</a></TableRowColumn>
                                             </TableRow>
                                             <TableRow>
                                                 <TableHeaderColumn>IP:</TableHeaderColumn>
                                                 <TableRowColumn>{request.ipAddress}</TableRowColumn>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableHeaderColumn>Ответственный:</TableHeaderColumn>
+                                                <TableRowColumn><strong>{request.responsibleLogin}</strong></TableRowColumn>
                                             </TableRow>
                                         </TableBody>
                                     </Table>
                                 </div>
                                 <div style={{clear: 'both'}}></div>
                                 <hr />
-                                <div className={css(Styles.leftColomn)}>
+                                <div className={css([Styles.leftColomn, Styles.leftColomnPersonalInfo])}>
                                     <Table selectable={false}>
                                         <TableBody displayRowCheckbox={false}>
+                                            <TableRow>
+                                                <TableHeaderColumn style={personInfoTableHStyle}>Название
+                                                    компании:</TableHeaderColumn>
+                                                <TableRowColumn>{request.companyName}</TableRowColumn>
+                                            </TableRow>
                                             <TableRow >
-                                                <TableHeaderColumn style={{'color': '#EC407A', fontWeight: 'bold'}}>Username:</TableHeaderColumn>
-                                                <TableHeaderColumn style={{'color': '#EC407A', fontWeight: 'bold'}}>Телефон:</TableHeaderColumn>
+                                                <TableHeaderColumn style={personInfoTableHStyle}>Контактное
+                                                    лицо:</TableHeaderColumn>
+                                                <TableRowColumn>{request.contactPerson}</TableRowColumn>
+                                            </TableRow>
+                                            <TableRow >
+                                                <TableHeaderColumn
+                                                    style={personInfoTableHStyle}>Должность:</TableHeaderColumn>
+                                                <TableRowColumn>{request.employerPostName}</TableRowColumn>
                                             </TableRow>
                                             <TableRow>
-                                                <TableRowColumn>{request.userName}</TableRowColumn>
+                                                <TableHeaderColumn
+                                                    style={personInfoTableHStyle}>Телефон:</TableHeaderColumn>
                                                 <TableRowColumn>{request.contactPhone}</TableRowColumn>
                                             </TableRow>
                                         </TableBody>
@@ -148,13 +155,13 @@ class RequestPage extends Component {
                             </div>
                         })
 
-                        : 'LOADING...'
+                        : <CircularProgress size={80}/>
 
                     }
 
-                    <br/>
-                    <h2>Сообщения</h2>
+                    <br/> <br/>
 
+                    { requestData ? <h2>Сообщения</h2> : '' }
 
                     <div>{ requestData ? requestData[1].map(message => {
                             return (

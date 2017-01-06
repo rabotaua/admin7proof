@@ -6,11 +6,7 @@ import JobsearcherIcon from 'material-ui/svg-icons/action/search'
 
 export default class TabSwitcher extends Component {
     render() {
-
-        const linkStyle = {color: '#CE93D8', marginTop: 50, marginRight: 20, textDecoration: 'none'}
-
         return (
-
             <Tabs>
                 <Tab
                     onActive={() => this.props.changeTypeCallback(2)}

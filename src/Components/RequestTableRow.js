@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {TableRow, TableRowColumn} from 'material-ui/Table'
 import {Link} from 'react-router'
 import {StyleSheet, css} from 'aphrodite'
+import StatusWord from '../Components/StatusWord'
 
 const tableStyles = StyleSheet.create({
     link: {
@@ -13,14 +14,7 @@ const tableStyles = StyleSheet.create({
 
 
 export default class RequestTableRow extends Component {
-
-    statusWord(id) {
-        id = parseInt(id, 10); // eslint swears on the second argument :C   It's a radix argument O_O
-        return id === 1 ? 'открыта' : id === 2 ? 'в работе' : id === 3 ? 'открыта повторно' : id === 4 ? 'закрыта' : ''
-    }
-
     render() {
-
         const {requestID, notebookID, eMail, subjectName, subSubjectName, state} = this.props;
 
         return (
@@ -34,7 +28,7 @@ export default class RequestTableRow extends Component {
                 <TableRowColumn>{eMail}</TableRowColumn>
                 <TableRowColumn>{subjectName}</TableRowColumn>
                 <TableRowColumn>{subSubjectName}</TableRowColumn>
-                <TableRowColumn>{ this.statusWord(state) }</TableRowColumn>
+                <TableRowColumn><StatusWord statusId={state}/></TableRowColumn>
             </TableRow>
         )
     }
