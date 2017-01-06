@@ -5,6 +5,10 @@ import CircularProgress from 'material-ui/CircularProgress'
 import Paper from 'material-ui/Paper';
 import {StyleSheet, css} from 'aphrodite'
 import StatusWord from '../Components/StatusWord'
+import ChangeSubject from '../Components/ChangeSubject'
+import {dateTimeFormat} from '../Utils/dateTimeFormat'
+
+
 
 const Styles = StyleSheet.create({
     leftColomn: {
@@ -62,7 +66,9 @@ class RequestPage extends Component {
 
         return (
             <div className={css(Styles.container)}>
-                <h1>Заявка #{this.context.router.params['requestId']}
+                <h1 style={{marginBottom: '50px'}}>
+                    Заявка #{this.context.router.params['requestId']}
+                    <ChangeSubject />
                 </h1>
 
                 <div>
@@ -75,7 +81,7 @@ class RequestPage extends Component {
                                         <TableBody displayRowCheckbox={false} >
                                             <TableRow>
                                                 <TableHeaderColumn>Дата заявки:</TableHeaderColumn>
-                                                <TableRowColumn>{request.date}</TableRowColumn>
+                                                <TableRowColumn>{ dateTimeFormat(request.date) }</TableRowColumn>
                                             </TableRow>
                                             <TableRow>
                                                 <TableHeaderColumn>ID блокнота:</TableHeaderColumn>
@@ -165,7 +171,7 @@ class RequestPage extends Component {
 
                     <div>{ requestData ? requestData[1].map(message => {
                             return (
-                                <Paper zDepth={1} className={css(Styles.paper)}>
+                                <Paper key={message.id} zDepth={1} className={css(Styles.paper)}>
                                     <div style={{padding: '10px 20px', background: 'rgba(219, 201, 243, 0.34902)'}}>
                                         <span >{message.loginEMail}</span>
                                         <span style={{float: 'right'}}>{message.addDate}</span>

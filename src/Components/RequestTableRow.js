@@ -4,6 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import {Link} from 'react-router'
 import {StyleSheet, css} from 'aphrodite'
 import StatusWord from '../Components/StatusWord'
+import {dateTimeFormat} from '../Utils/dateTimeFormat'
 
 
 const tableStyles = StyleSheet.create({
@@ -45,7 +46,7 @@ export default class RequestTableRow extends Component {
                 <TableRowColumn>{subSubjectName}</TableRowColumn>
                 <TableRowColumn><StatusWord statusId={state}/></TableRowColumn>
                 <TableRowColumn><strong>{responsibleLogin}</strong></TableRowColumn>
-                <TableRowColumn>{date}</TableRowColumn>
+                <TableRowColumn>{ dateTimeFormat(date) }</TableRowColumn>
                 <TableRowColumn>
                     { this.takeJobCheck() ? <RaisedButton primary={true} label="Взять в работу"/> : '' }
                 </TableRowColumn>
