@@ -46,4 +46,28 @@ describe('withApi', () => {
             <Route path="/" component={withApi(TestComponent)}/>
         </Router>, document.createElement('div'))
     })
+
+    it('should redirect unauthoried requests', done => {
+        fetchMock.get(/ping/, 401)
+
+        class TestComponentOne extends React.Component {
+            render () {
+                this.props.get('/ping')
+                return null
+            }
+        }
+
+        class TestComponentTwo extends React.Component {
+            render () {
+                expect(username.get()).toBe(undefined)
+                done()
+                return null
+            }
+        }
+
+        ReactDOM.render(<Router history={createMemoryHistory()}>
+            <Route path="/" component={withApi(TestComponentOne)}/>
+            <Route path="/login" component={withApi(TestComponentTwo)}/>
+        </Router>, document.createElement('div'))
+    })
 })

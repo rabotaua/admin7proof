@@ -27,6 +27,7 @@ export const withApi = ComposedComponent => class extends React.Component {
 
     responseHandler (response) {
         if (response.status === 401) {
+            username.set(undefined)
             this.props.router.push({pathname: '/login', state: response})
         } else {
             username.prolongate()
