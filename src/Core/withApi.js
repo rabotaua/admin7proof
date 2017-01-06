@@ -5,7 +5,8 @@ import username from './username'
 export const withApi = ComposedComponent => class extends React.Component {
     constructor (props) {
         super(props)
-        this.responseHandler = this.responseHandler.bind(this)
+        this.badResponseHandler = this.badResponseHandler.bind(this)
+        this.goodResponseHandler = this.goodResponseHandler.bind(this)
     }
 
     render () {
@@ -13,27 +14,35 @@ export const withApi = ComposedComponent => class extends React.Component {
             {...this.props}
             get={this.get}
             post={this.post}
-            responseHandler={this.responseHandler}
+            goodResponseHandler={this.goodResponseHandler}
+            badResponseHandler={this.badResponseHandler}
         />
     }
 
     get (url, data = null) {
-        return api.get(url, data).then(this.responseHandler)
+        return api.get(url, data)
+            .then(this.goodResponseHandler)
+            .catch(this.badResponseHandler)
     }
 
     post (url, data = null) {
-        return api.post(url, data).then(this.responseHandler)
+        return api.post(url, data)
+            .then(this.goodResponseHandler)
+            .catch(this.badResponseHandler)
     }
 
-    responseHandler (response) {
+    goodResponseHandler (data) {
+        username.prolongate()
+        return data
+    }
+
+    badResponseHandler (response) {
         if (response.status === 401) {
             username.set(undefined)
             this.props.router.push({pathname: '/login', state: response})
         } else {
-            username.prolongate()
+            return Promise.reject(response)
         }
-
-        return response.data
     }
 }
 

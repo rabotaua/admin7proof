@@ -3,15 +3,19 @@ import {stringify} from 'qs'
 const base = 'https://admin7.azurewebsites.net'
 
 const wrapper = (url, opts = {}) => fetch(`${base}${url}`, {...opts, mode: 'cors', credentials: 'include'})
-    .then(response => {
-        return response.text().then(text => {
-            try {
-                return {data: JSON.parse(text), status: response.status}
-            } catch (err) {
-                return {data: text, status: response.status}
-            }
-        })
-    })
+    .then(response => response.text().then(text => {
+        let data
+
+        try {
+            data = JSON.parse(text)
+        } catch (err) {
+            data = text
+        }
+
+        response.data = data
+
+        return response.ok ? data : Promise.reject(response)
+    }))
 
 
 export const get = (url, data = null) => wrapper(`${url}?${stringify(data)}`)
