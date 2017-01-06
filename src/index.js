@@ -10,6 +10,7 @@ import MainPage from './Pages/MainPage'
 import LoginPage from './Pages/LoginPage'
 import authGuard from './Core/authGuard'
 import usernameInjector from './Core/usernameInjector'
+import withApi from './Core/withApi'
 
 injectTapEventPlugin()
 
@@ -17,9 +18,9 @@ ReactDOM.render(
     <MuiThemeProvider>
         <Router history={browserHistory} createElement={usernameInjector}>
             <Route path="/" component={Layout}>
-                <IndexRoute component={MainPage} onEnter={authGuard}/>
+                <IndexRoute component={withApi(MainPage)} onEnter={authGuard}/>
                 <Route path="/about" component={AboutPage} onEnter={authGuard}/>
-                <Route path="/login" component={LoginPage}/>
+                <Route path="/login" component={withApi(LoginPage)}/>
             </Route>
         </Router>
     </MuiThemeProvider>,
