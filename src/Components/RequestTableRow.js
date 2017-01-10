@@ -5,6 +5,7 @@ import {StyleSheet, css} from 'aphrodite'
 import StatusWord from '../Components/StatusWord'
 import {dateTimeFormat} from '../Utils/dateTimeFormat'
 import TakeJobButton from '../Components/TakeJobButton'
+import {browserHistory} from 'react-router'
 
 
 const tableStyles = StyleSheet.create({
@@ -43,7 +44,12 @@ export default class RequestTableRow extends Component {
                 <TableRowColumn><strong>{responsibleLogin}</strong></TableRowColumn>
                 <TableRowColumn>{ dateTimeFormat(date) }</TableRowColumn>
                 <TableRowColumn style={{textAlign: 'center'}}>
-                    <TakeJobButton requestID={requestID} responsibleLogin={responsibleLogin} state={state}/>
+                    <TakeJobButton
+                        requestID={requestID}
+                        responsibleLogin={responsibleLogin}
+                        state={state}
+                        successfulCallback={ () => browserHistory['push'](`/request/${requestID}`) }
+                    />
                 </TableRowColumn>
             </TableRow>
         )

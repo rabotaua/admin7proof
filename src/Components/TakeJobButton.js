@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import RaisedButton from 'material-ui/RaisedButton'
-import {browserHistory} from 'react-router'
 import {setResponsibleApi, setStateApi} from '../Utils/fetchApi'
 
 
@@ -22,26 +21,25 @@ export default class TakeJobButton extends Component {
                 return true
             }
         }
-
     }
 
     takeJobAction() {
 
-        // start round spinner
+        // disable submit button
         this.setState({pendingRequest: true})
 
         const requestID = this.props.requestID
-        const responsibleLogin = localStorage.getItem('username') + 'aaaa'
+        const responsibleLogin = localStorage.getItem('username')
 
         setResponsibleApi(requestID, responsibleLogin).then(res => {
             if (res.status === 200) {
                 setStateApi(requestID, 2).then(res => {
                     if (res.status === 200) {
-                        browserHistory['push'](`/request/${this.props.requestID}`)
+                        this.props.successfulCallback()
                     }
                 })
             }
-        }).then(() => this.setState({pendingRequest: false})) //spinner off
+        }).then(() => this.setState({pendingRequest: false})) //enable submit button
 
     }
 
@@ -50,7 +48,8 @@ export default class TakeJobButton extends Component {
             <span>
                 { this.takeJobCheckShow() ?
                     <RaisedButton disabled={this.state.pendingRequest} onClick={this.takeJobAction.bind(this)}
-                                  primary={true} label="Взять в работу"/> : '' }
+                                  primary={true} label="Взять в работу"/>
+                    : this.props.children ? this.props.children : '' }
             </span>
         )
     }

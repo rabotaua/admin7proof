@@ -55,3 +55,17 @@ export const setStateApi = (requestId, stateId) => {
     const formDataApi = `[{ key: "RequestID", value: "${requestId}" }, { key: "State", value: "${stateId}" }]`
     return fetch(`${apiUrl}/exec/spAdmin7_Request_SetState`, {...requestOptions, body: formDataApi})
 }
+
+export const sendMessageApi = (requestID, textMessage, senderEmail) => {
+    const formDataApi = `[
+                                { key: "RequestID", value: "${requestID}" },
+                                { key: "Text", value: "${textMessage}" },
+                                { key: "LoginEMail", value: "${senderEmail}" },
+                                { key: "SubjectID", value: "0" },
+                                { key: "SubSubjectID", value: "0" },
+                                { key: "IsByUser", value: false },
+                                { key: "IsHideToUser", value: false },
+                            ]`
+
+    return fetch(`${apiUrl}/exec/spAdmin7_RequestText_Add`, {...requestOptions, body: formDataApi})
+}

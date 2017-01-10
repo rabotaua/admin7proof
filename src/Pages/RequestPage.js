@@ -7,6 +7,7 @@ import StatusWord from '../Components/StatusWord'
 import ChangeSubject from '../Components/ChangeSubject'
 import MessageItem from '../Components/MessageItem'
 import FeedbackForm from '../Components/FeedbackForm'
+import TakeJobButton from '../Components/TakeJobButton'
 import {dateTimeFormat} from '../Utils/dateTimeFormat'
 
 
@@ -164,10 +165,34 @@ class RequestPage extends Component {
 
                     <br/><br/>
 
-                    { requestData ? <h2>Сообщения</h2> : '' }
-                    { requestData ? requestData[1].map(message => <MessageItem key={message.id} {...message} />) : '' }
+                    { requestData ?
+                        <div>
+                            <h2>Сообщения:</h2>
 
-                    {/*<FeedbackForm />*/}
+                            <div>
+
+                                <TakeJobButton
+                                    requestID={this.context.router.params['requestId']}
+                                    responsibleLogin={requestData[0][0].responsibleLogin}
+                                    state={requestData[0][0].state}
+                                    successfulCallback={ () => this.getRequestData(this.context.router.params['requestId']) }
+                                >
+
+                                    { localStorage.getItem('userName') === requestData[0][0].responsibleLogin
+                                        ? <FeedbackForm
+                                            responsibleLogin={requestData[0][0].responsibleLogin}
+                                            requestID={this.context.router.params['requestId']}
+                                            sentCallback={() => this.getRequestData(this.context.router.params['requestId'])}
+                                        />
+                                        : '' }
+
+                                </TakeJobButton>
+                            </div>
+
+
+                        </div> : '' }
+
+                    { requestData ? requestData[1].map(message => <MessageItem key={message.id} {...message} />) : '' }
 
                 </div>
             </div>
