@@ -11,6 +11,7 @@ export default class FeedbackForm extends Component {
         super();
 
         this.state = {
+            sendPending: false,
             messageText: '',
             validationErr: ''
         }
@@ -39,15 +40,18 @@ export default class FeedbackForm extends Component {
         const {requestID, responsibleLogin, sentCallback} = this.props
         const messageTextVal = messageTextRef.input.refs.input.value
 
+
+        if (this.state.sendPending) return false
+
         if (messageTextVal.length === 0) {
             this.setState({validationErr: ' '})
             return
         }
 
-        this.setState({validationErr: ''})
+        this.setState({validationErr: '', sendPending: true})
         sendMessageApi(requestID, messageTextVal, responsibleLogin).then(res => {
             sentCallback() //refresh ticket data (including messages)
-            this.setState({messageText: ""})
+            this.setState({messageText: "", sendPending: false})
         })
     }
 
@@ -65,7 +69,7 @@ export default class FeedbackForm extends Component {
                         value={this.state.messageText}
                         onChange={ (e) => this.setState({messageText: e.target.value}) }
                     />
-                    <RaisedButton type="submit" label="Отправить" primary={true}/>
+                    <RaisedButton type="submit" label="Отправить" primary={true} disabled={this.state.sendPending}/>
                 </form>
             </div>
         )

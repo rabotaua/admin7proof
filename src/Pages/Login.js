@@ -14,6 +14,7 @@ export default class LoginPage extends Component {
         super()
 
         this.state = {
+            loginPending: false,
             emailVal: '',
             passVal: '',
             validateEmailErr: '',
@@ -58,21 +59,26 @@ export default class LoginPage extends Component {
             password: password.input.value
         })
 
+        this.setState({loginPending: true})
+
         loginApi(fetchBody)
             .then(res => {
                 if (res.status === 200) {
                     localStorage.setItem('auth', true)
                     browserHistory['push']('/');
                 }
-                else {
+                else if (res.status >= 400 && res.status < 500) {
                     this.setState({authError: 'Логин или пароль неправильные'})
                 }
-            })
+                else {
+                    this.setState({authError: 'Server Error'})
+                }
+            }).then(() => this.setState({loginPending: false}))
     }
 
     render() {
 
-        const {validateEmailErr, validatePassErr} = this.state;
+        const {validateEmailErr, validatePassErr, loginPending} = this.state;
 
         const inputStyle = {width: '100%', display: 'block'}
         return (
@@ -93,7 +99,8 @@ export default class LoginPage extends Component {
                     />
 
                     <div style={{paddingTop: 20, textAlign: 'center'}}>
-                        <FlatButton primary={true} type="submit" onClick={this.login.bind(this)}>ВОЙТИ</FlatButton>
+                        <FlatButton primary={true} type="submit" disabled={loginPending}
+                                    onClick={this.login.bind(this)}>ВОЙТИ</FlatButton>
                     </div>
 
                     <br />

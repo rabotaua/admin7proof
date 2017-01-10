@@ -9,6 +9,7 @@ import InWork from 'material-ui/svg-icons/action/lock-open'
 import SearchComponent from '../Components/Search'
 import RequestTableRow from '../Components/RequestTableRow'
 import TabSwitcher from '../Components/TabSwitcher'
+import CreateNewRequest from '../Components/CreateNewRequest'
 
 import {StyleSheet, css} from 'aphrodite'
 
@@ -86,6 +87,8 @@ class RequestsList extends Component {
 
             <div>
 
+                <CreateNewRequest />
+
                 <h1 style={{float: 'left', margin: 0, padding: '25px'}}>
                     { this.pageType === 'open'
                         ? <span><InWork style={iconStyle}/>Открытые заявки</span>
@@ -129,6 +132,7 @@ class RequestsList extends Component {
                                     state={request.state}
                                     responsibleLogin={request.responsibleLogin}
                                     date={request.date}
+                                    disableCheckExpire={this.pageType === 'done'}
                                 />)
 
                             : <TableRow>

@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import {StyleSheet, css} from 'aphrodite'
-import Paper from 'material-ui/Paper';
-import {dateTimeFormat} from '../Utils/dateTimeFormat'
+import Paper from 'material-ui/Paper'
 
 
 const Styles = StyleSheet.create({
@@ -19,7 +18,9 @@ export default class MessageItem extends Component {
             <Paper zDepth={0} className={css(Styles.paper)}>
                 <div style={{padding: '10px 20px', background: 'rgba(219, 201, 243, 0.34902)'}}>
                     <span>{ loginEMail ? loginEMail : <span>&nbsp;</span> } </span>
-                    <span style={{float: 'right'}}>{ dateTimeFormat(this.props.addDate) }</span>
+                    <span style={{float: 'right'}}>
+
+                    </span>
                 </div>
                 <div style={{padding: '20px', fontSize: '14px'}}>{this.props.text}</div>
             </Paper>

@@ -8,8 +8,7 @@ import ChangeSubject from '../Components/ChangeSubject'
 import MessageItem from '../Components/MessageItem'
 import FeedbackForm from '../Components/FeedbackForm'
 import TakeJobButton from '../Components/TakeJobButton'
-import {dateTimeFormat} from '../Utils/dateTimeFormat'
-
+import DateTimeFormatter from '../Components/DateTimeFormatter'
 
 
 const Styles = StyleSheet.create({
@@ -79,7 +78,8 @@ class RequestPage extends Component {
                                         <TableBody displayRowCheckbox={false} >
                                             <TableRow>
                                                 <TableHeaderColumn>Дата заявки:</TableHeaderColumn>
-                                                <TableRowColumn>{ dateTimeFormat(request.date) }</TableRowColumn>
+                                                <TableRowColumn><DateTimeFormatter
+                                                    dateTime={request.date}/></TableRowColumn>
                                             </TableRow>
                                             <TableRow>
                                                 <TableHeaderColumn>ID блокнота:</TableHeaderColumn>

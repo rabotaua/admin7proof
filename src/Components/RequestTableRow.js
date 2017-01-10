@@ -3,8 +3,8 @@ import {TableRow, TableRowColumn} from 'material-ui/Table'
 import {Link} from 'react-router'
 import {StyleSheet, css} from 'aphrodite'
 import StatusWord from '../Components/StatusWord'
-import {dateTimeFormat} from '../Utils/dateTimeFormat'
 import TakeJobButton from '../Components/TakeJobButton'
+import DateTimeFormatter from '../Components/DateTimeFormatter'
 import {browserHistory} from 'react-router'
 
 
@@ -42,7 +42,9 @@ export default class RequestTableRow extends Component {
                 <TableRowColumn>{subSubjectName}</TableRowColumn>
                 <TableRowColumn><StatusWord statusId={state}/></TableRowColumn>
                 <TableRowColumn><strong>{responsibleLogin}</strong></TableRowColumn>
-                <TableRowColumn>{ dateTimeFormat(date) }</TableRowColumn>
+                <TableRowColumn>
+                    <DateTimeFormatter disableCheckExpire={this.props.disableCheckExpire} dateTime={date}/>
+                </TableRowColumn>
                 <TableRowColumn style={{textAlign: 'center'}}>
                     <TakeJobButton
                         requestID={requestID}

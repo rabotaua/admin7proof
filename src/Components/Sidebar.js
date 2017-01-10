@@ -23,21 +23,15 @@ export default class Sidebar extends Component {
 
                     <MenuItem onTouchTap={openCloseCallback}
                               containerElement={<Link to="/"/>}
-                              primaryText="Main page"/>
-                    <MenuItem onTouchTap={openCloseCallback}
-                              containerElement={<Link to="/about"/>}
-                              primaryText="About"/>
-                    <MenuItem onTouchTap={openCloseCallback}
-                              containerElement={<Link to="/404"/>}
-                              primaryText="No page"/>
+                              primaryText="Главная"/>
 
                     { localStorage.getItem('auth') ?
                         <MenuItem onTouchTap={openCloseCallback} containerElement={<Link to="/requests/open"/>}
-                                  primaryText="Open requests"/> : '' }
+                                  primaryText="Открытые заявки"/> : '' }
 
                     { localStorage.getItem('auth') ?
                         <MenuItem onTouchTap={openCloseCallback} containerElement={<Link to="/requests/done"/>}
-                                  primaryText="Done requests"/> : '' }
+                                  primaryText="Отработанные заявки"/> : '' }
 
                 </Drawer>
             </div>
