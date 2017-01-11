@@ -16,7 +16,14 @@ const searchFormStyles = StyleSheet.create({
         borderRadius: '2px',
         border: '1px solid rgba(49, 21, 84, 0.21)',
         position: 'relative',
-        top: '-1px'
+        top: '-1px',
+        outline: 'none',
+        transition: 'all 0.2s ease',
+        ':focus': {
+            outline: 'none',
+            border: '1px solid grey',
+            transition: 'all 0.2s ease'
+        }
     },
     btn: {
         marginLeft: '10px'

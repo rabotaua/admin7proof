@@ -3,6 +3,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
+import websocketEmitter from '../Utils/websocketEmitter'
 
 
 export default class CreateNewRequest extends Component {
@@ -51,7 +52,14 @@ export default class CreateNewRequest extends Component {
                     open={this.state.modalShow}
                     onRequestClose={() => this.modalShow.call(this, false)}
                 >
-                    The actions in this window were passed in as an array of React objects.
+
+                    {
+                        websocketEmitter.getLatestEvents().map((message, index) => {
+                            return <span key={index}>{message}</span>
+                        })
+                    }
+
+
                 </Dialog>
 
 

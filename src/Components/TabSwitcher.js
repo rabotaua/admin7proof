@@ -4,6 +4,7 @@ import EmployerIcon from 'material-ui/svg-icons/action/work'
 import JobsearcherIcon from 'material-ui/svg-icons/action/search'
 import Badge from 'material-ui/Badge'
 
+
 export default class TabSwitcher extends Component {
 
     constructor() {

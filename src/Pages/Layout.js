@@ -1,5 +1,6 @@
 import React, {Component} from "react"
 import Header from '../Components/Header'
+import WebSocketNotifier from '../Components/WebsocketNotifier'
 
 
 export default class MainPage extends Component {
@@ -7,6 +8,7 @@ export default class MainPage extends Component {
         return (
             <main>
                 <Header />
+                <WebSocketNotifier />
                 {this.props.children}
             </main>
         )

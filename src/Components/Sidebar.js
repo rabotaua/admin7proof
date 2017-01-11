@@ -8,6 +8,7 @@ import MenuItem from 'material-ui/MenuItem'
 import IconButton from 'material-ui/IconButton'
 import NavigationClose from 'material-ui/svg-icons/navigation/close'
 
+
 export default class Sidebar extends Component {
 
     render() {

@@ -2,7 +2,8 @@ import React, {Component} from 'react'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
 import {sendMessageApi} from '../Utils/fetchApi'
-
+import websocketEmitter from '../Utils/websocketEmitter'
+import {WS_NEW_MESSAGE} from '../Constants/wsActions'
 
 
 export default class FeedbackForm extends Component {
@@ -52,6 +53,8 @@ export default class FeedbackForm extends Component {
         sendMessageApi(requestID, messageTextVal, responsibleLogin).then(res => {
             sentCallback() //refresh ticket data (including messages)
             this.setState({messageText: "", sendPending: false})
+
+            websocketEmitter.emit(WS_NEW_MESSAGE, {requestID, responsibleLogin})
         })
     }
 

@@ -38,8 +38,8 @@ export default class DateTimeFormatter extends Component {
         const formattedTimestamp = new Date(`${month}.${day}.${year} ${time}`).getTime()
         const differenceTime = Date.now() - formattedTimestamp
 
-        differenceTime > dayInMs ? this.setState({expireStatus: true}) : null
-
+        if (differenceTime > dayInMs)
+            this.setState({expireStatus: true})
 
     }
 

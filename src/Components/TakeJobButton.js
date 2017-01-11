@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 import RaisedButton from 'material-ui/RaisedButton'
 import {setResponsibleApi, setStateApi} from '../Utils/fetchApi'
+import websocketEmitter from '../Utils/websocketEmitter'
+import {WS_TAKE_A_JOB} from '../Constants/wsActions'
 
 
 export default class TakeJobButton extends Component {
@@ -35,6 +37,7 @@ export default class TakeJobButton extends Component {
             if (res.status === 200) {
                 setStateApi(requestID, 2).then(res => {
                     if (res.status === 200) {
+                        websocketEmitter.emit(WS_TAKE_A_JOB, {requestID, responsibleLogin})
                         this.props.successfulCallback()
                     }
                 })
