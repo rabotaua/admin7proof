@@ -31,7 +31,7 @@ export default class TakeJobButton extends Component {
         this.setState({pendingRequest: true})
 
         const requestID = this.props.requestID
-        const responsibleLogin = localStorage.getItem('username')
+        const responsibleLogin = localStorage.getItem('userName')
 
         setResponsibleApi(requestID, responsibleLogin).then(res => {
             if (res.status === 200) {

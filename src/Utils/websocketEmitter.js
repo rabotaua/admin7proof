@@ -26,7 +26,10 @@ const websocketEmitter = (url => {
     function storeEvent(message) {
         if (message) {
             const currD = new Date()
-            latestEvents.push({message, date: `${ currD.getHours() }:${ currD.getMinutes() }`})
+            latestEvents.push({
+                message,
+                date: `${ currD.getHours() }:${currD.getMinutes() < 10 ? '0' : ''}${ currD.getMinutes() }`
+            })
             emit('newLatest')
         }
     }

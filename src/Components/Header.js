@@ -11,6 +11,7 @@ import FlatButton from "material-ui/RaisedButton";
 import RaisedButton from "material-ui/RaisedButton";
 import LatestEvents from "./LatestEvents";
 import Badge from "material-ui/Badge";
+import websocketEmitter from '../Utils/websocketEmitter'
 
 
 class Header extends Component {
@@ -30,7 +31,7 @@ class Header extends Component {
     }
 
     latestEventsCounter() {
-        this.setState({latestCount: this.state.latestCount + 1})
+        this.setState({latestCount: websocketEmitter.getLatestEvents().length})
     }
 
     openCloseSidebar() {
@@ -93,7 +94,7 @@ class Header extends Component {
 
 
                         { this.state.latestCount !== 0 ?
-                            <span style={{position: 'absolute', top: '-23px', right: '-7px'}}>
+                            <span style={{position: 'absolute', top: '-23px', right: '-2px'}}>
                                 <Badge
                                     badgeContent={this.state.latestCount}
                                     secondary={true}
