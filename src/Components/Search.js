@@ -42,6 +42,7 @@ export default class Search extends Component {
             return false
 
         this.props.searchCallback({
+            type: '',
             requestId: requestId.value,
             notebookId: notebookId.value,
             eMail: eMail.value

@@ -1,14 +1,12 @@
 import React, {Component} from "react"
 import {getListApi} from '../Utils/fetchApi'
 import {normalize, schema} from 'normalizr'
-
+import InfiniteScroll from 'react-infinite-scroller';
 
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 import CircularProgress from 'material-ui/CircularProgress'
 import DoneIcon from 'material-ui/svg-icons/action/check-circle'
 import InWork from 'material-ui/svg-icons/action/lock-open'
-import RaisedButton from 'material-ui/RaisedButton';
-
 
 import SearchComponent from '../Components/Search'
 import RequestTableRow from '../Components/RequestTableRow'
@@ -44,6 +42,8 @@ class RequestsList extends Component {
         }
 
         this.state = {
+            hasMore: true,
+            pendingList: false,
             params: {
                 type: 2,
                 stateIds: this.pageType === 'open' ? '0,1,2,3' : '0,1,2,3,4',
@@ -53,7 +53,6 @@ class RequestsList extends Component {
             totalCount: null
         }
 
-
         // schema for normalizing response
         const requestSchema = new schema.Entity('requests', {}, {idAttribute: 'requestID'});
         this.requestsSchemaList = new schema.Array(requestSchema);
@@ -61,9 +60,7 @@ class RequestsList extends Component {
 
     getListRequest() {
 
-        // console.log('BEFORE FETCH STATE: ', this.state)
-
-
+        this.setState({pendingList: true})
         getListApi(this.state.params).then(res => res.json()).then(data => {
 
             const normalizedData = normalize(data[0], this.requestsSchemaList);
@@ -72,26 +69,26 @@ class RequestsList extends Component {
                 list: Object.assign(this.state.list, normalizedData.entities.requests),
                 totalCount: data[1][0]['totalCount']
             })
-        })
+        }).then(() => this.setState({pendingList: false}))
     }
 
     clearListAndNewState(newParams = {}) {
         // clear state
-        this.setState(() => {
-            return {
-                list: {},
-                totalCount: 0,
-                params: Object.assign(this.state.params, {
-                    requestId: '',
-                    notebookId: '',
-                    eMail: '',
-                    startRowIndex: ''
-                })
+
+        const clearStateObj = {
+            list: {},
+            totalCount: 0,
+            hasMore: true,
+            params: {
+                ...this.state.params,
+                requestId: '',
+                notebookId: '',
+                eMail: '',
+                startRowIndex: ''
             }
-        }, () => { // after clearing set new state
+        }
 
-            // console.debug('state after clear:', this.state.params)
-
+        this.setState(() => clearStateObj, () => { // after clearing set new state
             this.setState(() => {
                 return {
                     params: {
@@ -99,12 +96,7 @@ class RequestsList extends Component {
                         ...newParams
                     }
                 }
-            }, () => {
-
-                // console.debug('state prefetch:', this.state.params)
-
-                this.getListRequest()
-            }) // and fetch data with new parameters
+            }, this.getListRequest) // and fetch data with new parameters
         })
     }
 
@@ -118,14 +110,15 @@ class RequestsList extends Component {
     }
 
     searchReset() {
-        this.clearListAndNewState({type: 2})
+        this.changeType(2)
     }
 
     showMore() {
+
+        if (this.state.pendingList) return
+
         const currentCount = Object.keys(this.state.list).length
         const totalCount = this.state.totalCount
-
-        console.log('currentCount: ', currentCount, 'totalCount: ', totalCount)
 
         if (totalCount > currentCount) {
             this.setState({
@@ -134,6 +127,9 @@ class RequestsList extends Component {
                     startRowIndex: currentCount
                 }
             }, this.getListRequest)
+        }
+        else {
+            this.setState({hasMore: false})
         }
     }
 
@@ -160,10 +156,21 @@ class RequestsList extends Component {
             marginRight: 20
         }
 
+
+        const PendingLoader = () => {
+
+            if (!(totalCount > currentCount)) return null
+
+            return (
+                <div style={{textAlign: 'center', padding: '50px 0'}}>
+                    <CircularProgress size={80}/>
+                </div>
+            )
+        }
+
+
+
         return (
-
-
-
             <div>
 
                 <CreateNewRequest />
@@ -183,49 +190,56 @@ class RequestsList extends Component {
                              changeTypeCallback={this.changeType.bind(this)}
                              totalCount={ totalCount && totalCount > 0 ? totalCount : false }/>
 
-                <Table selectable={false}>
-                    <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
-                        <TableRow>
-                            <TableHeaderColumn className={css(tableStyles.th)}>ID заявки</TableHeaderColumn>
-                            <TableHeaderColumn className={css(tableStyles.th)}>ID блокнота</TableHeaderColumn>
-                            <TableHeaderColumn className={css(tableStyles.th)}>Email</TableHeaderColumn>
-                            <TableHeaderColumn className={css(tableStyles.th)}>Тема</TableHeaderColumn>
-                            <TableHeaderColumn className={css(tableStyles.th)}>Подтема</TableHeaderColumn>
-                            <TableHeaderColumn className={css(tableStyles.th)}>Статус</TableHeaderColumn>
-                            <TableHeaderColumn className={css(tableStyles.th)}>Ответственный</TableHeaderColumn>
-                            <TableHeaderColumn className={css(tableStyles.th)}>Дата/время</TableHeaderColumn>
-                            <TableHeaderColumn className={css(tableStyles.th)}/>
-                        </TableRow>
-                    </TableHeader>
 
-                    <TableBody displayRowCheckbox={false}>
-                        { list
-                            ? Object.keys(list).map(key => <RequestTableRow
-                                key={list[key].requestID}
-                                requestID={list[key].requestID}
-                                notebookID={list[key].notebookID}
-                                eMail={list[key].eMail}
-                                subjectName={list[key].subjectName}
-                                subSubjectName={list[key].subSubjectName}
-                                state={list[key].state}
-                                responsibleLogin={list[key].responsibleLogin}
-                                date={list[key].date}
+                <InfiniteScroll
+                    initialLoad={false}
+                    threshold={200}
+                    hasMore={this.state.hasMore}
+                    loadMore={() => {
+                        setTimeout(this.showMore.bind(this), 500)
+                    }}
+                    loader={<PendingLoader />}
+                >
+
+                    <Table selectable={false}>
+                        <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+                            <TableRow>
+                                <TableHeaderColumn className={css(tableStyles.th)}>ID заявки</TableHeaderColumn>
+                                <TableHeaderColumn className={css(tableStyles.th)}>ID блокнота</TableHeaderColumn>
+                                <TableHeaderColumn className={css(tableStyles.th)}>Email</TableHeaderColumn>
+                                <TableHeaderColumn className={css(tableStyles.th)}>Тема</TableHeaderColumn>
+                                <TableHeaderColumn className={css(tableStyles.th)}>Подтема</TableHeaderColumn>
+                                <TableHeaderColumn className={css(tableStyles.th)}>Статус</TableHeaderColumn>
+                                <TableHeaderColumn className={css(tableStyles.th)}>Ответственный</TableHeaderColumn>
+                                <TableHeaderColumn className={css(tableStyles.th)}>Дата/время</TableHeaderColumn>
+                                <TableHeaderColumn className={css(tableStyles.th)}/>
+                            </TableRow>
+                        </TableHeader>
+
+                        <TableBody displayRowCheckbox={false}>
+                            { list
+                                ? Object.keys(list).map(key => <RequestTableRow
+                                    key={list[key].requestID}
+                                    requestID={list[key].requestID}
+                                    notebookID={list[key].notebookID}
+                                    eMail={list[key].eMail}
+                                    subjectName={list[key].subjectName}
+                                    subSubjectName={list[key].subSubjectName}
+                                    state={list[key].state}
+                                    responsibleLogin={list[key].responsibleLogin}
+                                    date={list[key].date}
                                     disableCheckExpire={this.pageType === 'done'}
                                 />)
 
-                            : <TableRow>
-                                <TableRowColumn style={{textAlign: 'center', padding: '50px 0'}}>
-                                    <CircularProgress size={80}/>
-                                </TableRowColumn>
-                            </TableRow>
-                        }
-
-                    </TableBody>
-                </Table>
-
-                <RaisedButton fullWidth={true} primary={true} label="Показать еще..." onClick={this.showMore.bind(this)}
-                              disabled={ !(totalCount > currentCount) }/>
-
+                                : <TableRow>
+                                    <TableRowColumn style={{textAlign: 'center', padding: '50px 0'}}>
+                                        <CircularProgress size={80}/>
+                                    </TableRowColumn>
+                                </TableRow>
+                            }
+                        </TableBody>
+                    </Table>
+                </InfiniteScroll>
             </div>
         )
     }
