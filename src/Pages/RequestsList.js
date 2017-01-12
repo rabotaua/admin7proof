@@ -1,9 +1,13 @@
 import React, {Component} from "react"
 import {getListApi} from '../Utils/fetchApi'
+import {normalize, schema} from 'normalizr'
+
+
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 import CircularProgress from 'material-ui/CircularProgress'
 import DoneIcon from 'material-ui/svg-icons/action/check-circle'
 import InWork from 'material-ui/svg-icons/action/lock-open'
+import RaisedButton from 'material-ui/RaisedButton';
 
 
 import SearchComponent from '../Components/Search'
@@ -40,28 +44,97 @@ class RequestsList extends Component {
         }
 
         this.state = {
-            type: 2,
-            stateIds: this.pageType === 'open' ? '0,1,2,3' : '0,1,2,3,4',
-            list: null
+            params: {
+                type: 2,
+                stateIds: this.pageType === 'open' ? '0,1,2,3' : '0,1,2,3,4',
+                startRowIndex: ''
+            },
+            list: {},
+            totalCount: null
         }
+
+
+        // schema for normalizing response
+        const requestSchema = new schema.Entity('requests', {}, {idAttribute: 'requestID'});
+        this.requestsSchemaList = new schema.Array(requestSchema);
     }
 
-    getListRequest(params /* object with parameters */) {
-        getListApi(params).then(res => res.json()).then(data => this.setState({list: data}))
+    getListRequest() {
+
+        // console.log('BEFORE FETCH STATE: ', this.state)
+
+
+        getListApi(this.state.params).then(res => res.json()).then(data => {
+
+            const normalizedData = normalize(data[0], this.requestsSchemaList);
+
+            this.setState({
+                list: Object.assign(this.state.list, normalizedData.entities.requests),
+                totalCount: data[1][0]['totalCount']
+            })
+        })
     }
+
+    clearListAndNewState(newParams = {}) {
+        // clear state
+        this.setState(() => {
+            return {
+                list: {},
+                totalCount: 0,
+                params: Object.assign(this.state.params, {
+                    requestId: '',
+                    notebookId: '',
+                    eMail: '',
+                    startRowIndex: ''
+                })
+            }
+        }, () => { // after clearing set new state
+
+            // console.debug('state after clear:', this.state.params)
+
+            this.setState(() => {
+                return {
+                    params: {
+                        ...this.state.params,
+                        ...newParams
+                    }
+                }
+            }, () => {
+
+                // console.debug('state prefetch:', this.state.params)
+
+                this.getListRequest()
+            }) // and fetch data with new parameters
+        })
+    }
+
 
     changeType(type = 1) {
-        this.setState({type: type, list: null})
-        const {stateIds} = this.state;
-        this.getListRequest({type, stateIds})
+        this.clearListAndNewState({type})
     }
 
     searchItems(params) {
-        this.getListRequest(params);
+        this.clearListAndNewState({...params})
     }
 
     searchReset() {
-        this.changeType(this.state.type)
+        this.clearListAndNewState({type: 2})
+    }
+
+    showMore() {
+        const currentCount = Object.keys(this.state.list).length
+        const totalCount = this.state.totalCount
+
+        console.log('currentCount: ', currentCount, 'totalCount: ', totalCount)
+
+        if (totalCount > currentCount) {
+            this.setState({
+                params: {
+                    ...this.state.params,
+                    startRowIndex: currentCount
+                }
+            }, this.getListRequest)
+        }
     }
 
     componentWillMount() {
@@ -71,7 +144,11 @@ class RequestsList extends Component {
 
     render() {
 
-        const {list, type} = this.state
+        // console.log(this.state)
+
+        const {list, params, totalCount} = this.state
+        const currentCount = Object.keys(list).length
+
 
         const iconStyle = {
             color: 'rgb(124, 127, 148)',
@@ -84,6 +161,8 @@ class RequestsList extends Component {
         }
 
         return (
+
+
 
             <div>
 
@@ -100,8 +179,9 @@ class RequestsList extends Component {
                 <SearchComponent searchCallback={this.searchItems.bind(this)}
                                  resetCallback={this.searchReset.bind(this)}/>
 
-                <TabSwitcher pageType={this.pageType} currentType={type} changeTypeCallback={this.changeType.bind(this)}
-                             totalCount={ list ? list[1][0].totalCount : false }/>
+                <TabSwitcher pageType={this.pageType} currentType={params.type}
+                             changeTypeCallback={this.changeType.bind(this)}
+                             totalCount={ totalCount && totalCount > 0 ? totalCount : false }/>
 
                 <Table selectable={false}>
                     <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
@@ -119,19 +199,17 @@ class RequestsList extends Component {
                     </TableHeader>
 
                     <TableBody displayRowCheckbox={false}>
-
-                        { list && list.length > 0
-                            ? list[0].map(request =>
-                                <RequestTableRow
-                                    key={request.requestID}
-                                    requestID={request.requestID}
-                                    notebookID={request.notebookID}
-                                    eMail={request.eMail}
-                                    subjectName={request.subjectName}
-                                    subSubjectName={request.subSubjectName}
-                                    state={request.state}
-                                    responsibleLogin={request.responsibleLogin}
-                                    date={request.date}
+                        { list
+                            ? Object.keys(list).map(key => <RequestTableRow
+                                key={list[key].requestID}
+                                requestID={list[key].requestID}
+                                notebookID={list[key].notebookID}
+                                eMail={list[key].eMail}
+                                subjectName={list[key].subjectName}
+                                subSubjectName={list[key].subSubjectName}
+                                state={list[key].state}
+                                responsibleLogin={list[key].responsibleLogin}
+                                date={list[key].date}
                                     disableCheckExpire={this.pageType === 'done'}
                                 />)
 
@@ -144,6 +222,9 @@ class RequestsList extends Component {
 
                     </TableBody>
                 </Table>
+
+                <RaisedButton fullWidth={true} primary={true} label="Показать еще..." onClick={this.showMore.bind(this)}
+                              disabled={ !(totalCount > currentCount) }/>
 
             </div>
         )

@@ -28,6 +28,10 @@ export const getListApi = (paramsObj, paramsString = '' /* second arg is optiona
      sortDirection
      */
 
+    if (!paramsObj.maximumRows) {
+        paramsObj.maximumRows = 20
+    }
+
     if (!paramsString) {
         // eslint-disable-next-line
         Object.keys(paramsObj).map(param => {
