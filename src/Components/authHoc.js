@@ -11,7 +11,7 @@ export default function authHighOrderComponent(WrappedComp) {
             super();
 
             this.state = {
-                auth: null
+                auth: null,
             }
         }
 

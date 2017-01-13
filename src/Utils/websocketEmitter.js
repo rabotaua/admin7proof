@@ -12,7 +12,13 @@ const websocketEmitter = (url => {
     }
 
     function emit(type, detail) {
-        ws.send(JSON.stringify({type, detail}))
+        try {
+            ws.send(JSON.stringify({type, detail}))
+        }
+        catch (e) {
+            console.error(e)
+        }
+
         return this
     }
 
