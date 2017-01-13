@@ -2,26 +2,27 @@ import React, {Component} from "react"
 import {getListApi} from '../Utils/fetchApi'
 import {normalize, schema} from 'normalizr'
 import InfiniteScroll from 'react-infinite-scroller';
+import findIndex from 'lodash/findIndex'
 
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 import CircularProgress from 'material-ui/CircularProgress'
 import DoneIcon from 'material-ui/svg-icons/action/check-circle'
 import InWork from 'material-ui/svg-icons/action/lock-open'
 
+
 import SearchComponent from '../Components/Search'
 import RequestTableRow from '../Components/RequestTableRow'
 import TabSwitcher from '../Components/TabSwitcher'
 import CreateNewRequest from '../Components/CreateNewRequest'
+import TableHeaderFilter from '../Components/TableHeaderFilter'
+
+
 
 import {StyleSheet, css} from 'aphrodite'
 
 const tableStyles = StyleSheet.create({
     link: {
         textDecoration: 'none',
-        color: '#283593',
-        fontWeight: 'bold'
-    },
-    th: {
         color: '#283593',
         fontWeight: 'bold'
     }
@@ -50,12 +51,24 @@ class RequestsList extends Component {
                 startRowIndex: ''
             },
             list: {},
+            arrayOfItems: [],
             totalCount: null
         }
 
         // schema for normalizing response
         const requestSchema = new schema.Entity('requests', {}, {idAttribute: 'requestID'});
         this.requestsSchemaList = new schema.Array(requestSchema);
+
+        this.filtersList = [
+            {filterName: 'requestId', titleName: 'ID заявки'},
+            {filterName: 'notebookId', titleName: 'ID блокнота'},
+            {filterName: 'email', titleName: 'Email'},
+            {filterName: 'subjectName', titleName: 'Тема'},
+            {filterName: 'subSubjectName', titleName: 'Подтема'},
+            {filterName: 'state', titleName: 'Статус'},
+            {filterName: 'responsibleLogin', titleName: 'Ответственный'},
+            {filterName: 'date', titleName: 'Дата/время'},
+        ]
     }
 
     getListRequest() {
@@ -67,16 +80,19 @@ class RequestsList extends Component {
 
             this.setState({
                 list: Object.assign(this.state.list, normalizedData.entities.requests),
+                arrayOfItems: this.state.arrayOfItems.concat(normalizedData.result),
                 totalCount: data[1][0]['totalCount']
             })
+
         }).then(() => this.setState({pendingList: false}))
     }
 
     clearListAndNewState(newParams = {}) {
-        // clear state
 
+        // clear state
         const clearStateObj = {
             list: {},
+            arrayOfItems: [],
             totalCount: 0,
             hasMore: true,
             params: {
@@ -84,25 +100,17 @@ class RequestsList extends Component {
                 requestId: '',
                 notebookId: '',
                 eMail: '',
-                startRowIndex: ''
+                startRowIndex: '',
+                ...newParams
             }
         }
 
-        this.setState(() => clearStateObj, () => { // after clearing set new state
-            this.setState(() => {
-                return {
-                    params: {
-                        ...this.state.params,
-                        ...newParams
-                    }
-                }
-            }, this.getListRequest) // and fetch data with new parameters
-        })
+        this.setState(() => clearStateObj, this.getListRequest) // and fetch data with new parameters
     }
 
 
     changeType(type = 1) {
-        this.clearListAndNewState({type})
+        this.clearListAndNewState({type, sortField: '', sortDirection: ''})
     }
 
     searchItems(params) {
@@ -111,6 +119,25 @@ class RequestsList extends Component {
 
     searchReset() {
         this.changeType(2)
+    }
+
+    filterBy(e) {
+        const filterName = e.target.getAttribute('data-filter')
+        const filterIndexInArr = findIndex(this.filtersList, (o) => o.filterName === filterName)
+        const currentFilter = this.state.params.sortField
+
+        if (filterIndexInArr !== -1) {
+            this.clearListAndNewState({
+                sortField: filterName,
+                startRowIndex: '',
+                sortDirection: currentFilter === filterName ?
+
+                    (this.state.params.sortDirection === 'desc') ||
+                    (this.state.params.sortDirection === '') ? 'asc' : 'desc'
+
+                    : 'desc'
+            })
+        }
     }
 
     showMore() {
@@ -140,9 +167,7 @@ class RequestsList extends Component {
 
     render() {
 
-        // console.log(this.state)
-
-        const {list, params, totalCount} = this.state
+        const {list, arrayOfItems, params, totalCount} = this.state
         const currentCount = Object.keys(list).length
 
 
@@ -167,7 +192,6 @@ class RequestsList extends Component {
                 </div>
             )
         }
-
 
 
         return (
@@ -204,21 +228,30 @@ class RequestsList extends Component {
                     <Table selectable={false}>
                         <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
                             <TableRow>
-                                <TableHeaderColumn className={css(tableStyles.th)}>ID заявки</TableHeaderColumn>
-                                <TableHeaderColumn className={css(tableStyles.th)}>ID блокнота</TableHeaderColumn>
-                                <TableHeaderColumn className={css(tableStyles.th)}>Email</TableHeaderColumn>
-                                <TableHeaderColumn className={css(tableStyles.th)}>Тема</TableHeaderColumn>
-                                <TableHeaderColumn className={css(tableStyles.th)}>Подтема</TableHeaderColumn>
-                                <TableHeaderColumn className={css(tableStyles.th)}>Статус</TableHeaderColumn>
-                                <TableHeaderColumn className={css(tableStyles.th)}>Ответственный</TableHeaderColumn>
-                                <TableHeaderColumn className={css(tableStyles.th)}>Дата/время</TableHeaderColumn>
-                                <TableHeaderColumn className={css(tableStyles.th)}/>
+                                {
+                                    this.filtersList.map(el => {
+                                        return (
+                                            <TableHeaderFilter
+                                                key={el.filterName}
+                                                filterName={el.filterName}
+                                                titleName={el.titleName}
+                                                sortDirection={this.state.params.sortDirection}
+                                                sortField={this.state.params.sortField}
+                                                filterCallback={this.filterBy.bind(this)}
+                                            />
+                                        )
+                                    })
+                                }
+
+                                <TableHeaderColumn className={css(tableStyles.th)}/> {/* for TakeAJob button */}
+
                             </TableRow>
                         </TableHeader>
 
                         <TableBody displayRowCheckbox={false}>
+
                             { list
-                                ? Object.keys(list).map(key => <RequestTableRow
+                                ? arrayOfItems.map(key => <RequestTableRow
                                     key={list[key].requestID}
                                     requestID={list[key].requestID}
                                     notebookID={list[key].notebookID}
